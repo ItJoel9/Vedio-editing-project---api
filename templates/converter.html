@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <title>Video Converter</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/convert.css') }}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+<body>
+
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+  
+  <!-- Sidebar Nav -->
+  <nav id="sidebar">
+    
+    
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
+      <i class="fa-solid fa-user"></i><span class="text">Login</span>
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
+      <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
+    </a>
+
+    <h2>Navigation</h2>
+    <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
+      <i class="fa-solid fa-house"></i><span class="text">Home</span>
+    </a>
+    <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}">
+      <i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span>
+    </a>
+    <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}">
+      <i class="fa-solid fa-music"></i><span class="text">Trending Music</span>
+    </a>
+    <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}">
+      <i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span>
+    </a>
+    <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}">
+      <i class="fa-solid fa-tv"></i><span class="text">Platforms</span>
+    </a>
+    <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}">
+      <i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span>
+    </a>
+
+    <h2>Quick Tools</h2>
+    <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}">
+      <i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span>
+    </a>
+    <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
+      <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
+    </a>
+    
+    <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
+      <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
+    </a>
+  </nav>
+  <!-- Main Content -->
+  <div class="content">
+    <header>
+      <h1><i class="fa-solid fa-arrows-spin"></i> Video Converter</h1>
+      <p>Convert videos to your desired format easily and quickly.</p>
+    </header>
+
+    <section class="tools-section">
+      <div class="card-grid">
+        <div class="card">
+          <h3>Select a Video File</h3>
+          <p>Supported formats: MP4, MOV, AVI, MKV</p>
+          <input type="file" id="videoInput" accept="video/*" />
+        </div>
+
+        <div class="card">
+          <h3>Choose Output Format</h3>
+          <p>Select the format you want to convert your video into.</p>
+          <select id="formatSelect">
+            <option value="mp4">MP4</option>
+            <option value="avi">AVI</option>
+            <option value="mov">MOV</option>
+            <option value="mkv">MKV</option>
+          </select>
+        </div>
+
+        <div class="card">
+          <h3>Start Conversion</h3>
+          <p>Click the button below to begin the conversion process.</p>
+          <button class="btn" onclick="convertVideo()">Convert Now</button>
+        </div>
+      </div>
+
+      <div id="conversionMessage" style="margin-top: 20px;"></div>
+    </section>
+  </div>
+
+  <script>
+function convertVideo() {
+  const videoFile = document.getElementById("videoInput").files[0];
+  const format = document.getElementById("formatSelect").value;
+  const message = document.getElementById("conversionMessage");
+
+  if (!videoFile) {
+    message.innerHTML = "<p style='color: red;'>Please select a video file.</p>";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("video", videoFile);
+  formData.append("format", format);
+
+  fetch("/convert", {
+    method: "POST",
+    body: formData,
+  })
+  .then(response => {
+    if (!response.ok) throw new Error("Conversion failed.");
+    return response.blob();
+  })
+  .then(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `converted.${format}`;
+    a.click();
+    message.innerHTML = `<p style='color: green;'>✅ Converted successfully!</p>`;
+  })
+  .catch(() => {
+    message.innerHTML = "<p style='color: red;'>❌ Conversion failed.</p>";
+  });
+}
+</script>
+</body>
+</html>

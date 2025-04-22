@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vdio | Audio Trimmer</title>
+  <link rel="stylesheet" href="../static/css/trimmer.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .time-display {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #ff8500;
+    }
+
+    .mode-toggle {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .mode-toggle label {
+      margin-right: 10px;
+    }
+
+    .controls button,
+    .controls a.btn {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+  
+  <nav id="sidebar">
+    
+    
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
+      <i class="fa-solid fa-user"></i><span class="text">Login</span>
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
+      <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
+    </a>
+
+    <h2>Navigation</h2>
+    <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
+      <i class="fa-solid fa-house"></i><span class="text">Home</span>
+    </a>
+    <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}">
+      <i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span>
+    </a>
+    <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}">
+      <i class="fa-solid fa-music"></i><span class="text">Trending Music</span>
+    </a>
+    <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}">
+      <i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span>
+    </a>
+    <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}">
+      <i class="fa-solid fa-tv"></i><span class="text">Platforms</span>
+    </a>
+    <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}">
+      <i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span>
+    </a>
+
+    <h2>Quick Tools</h2>
+    <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}">
+      <i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span>
+    </a>
+    <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
+      <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
+    </a>
+    
+    <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
+      <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
+    </a>
+  </nav>
+
+  <div class="content">
+    <header>
+      <h1><img src="/static/media/v.png" alt="V Logo">dio</h1>
+      <p>Trim your audio clips with precision</p>
+    </header>
+
+    <div class="trimmer-container">
+      <h2>Upload Audio File</h2>
+      <input type="file" id="audioInput" accept="audio/*">
+      <div id="waveform"></div>
+
+      <div class="time-display">
+        Start: <span id="startTime">0.00</span>s | End: <span id="endTime">0.00</span>s
+      </div>
+
+      <!-- Trim Mode Toggle -->
+      <div class="mode-toggle">
+        <label><input type="radio" name="trimMode" value="keep" checked> Keep selected</label>
+        <label><input type="radio" name="trimMode" value="remove"> Remove selected</label>
+      </div>
+
+      <div class="controls">
+        <button id="playBtn" disabled>▶ Play</button>
+        <button id="trimBtn" disabled>✂ Trim</button>
+        <a id="downloadBtn" class="btn" disabled>⬇ Download</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- WaveSurfer + Region Plugin -->
+  <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
+
+  <script>
+    let wavesurfer;
+    let selectedFile = null;
+    let currentRegion = null;
+    
+    const audioInput = document.getElementById('audioInput');
+    const playBtn = document.getElementById('playBtn');
+    const trimBtn = document.getElementById('trimBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const startTimeEl = document.getElementById('startTime');
+    const endTimeEl = document.getElementById('endTime');
+    
+    function updateTimeDisplay(region) {
+      startTimeEl.textContent = region.start.toFixed(2);
+      endTimeEl.textContent = region.end.toFixed(2);
+    }
+    
+    audioInput.addEventListener('change', async (e) => {
+      selectedFile = e.target.files[0];
+      if (!selectedFile) return;
+    
+      playBtn.disabled = true;
+      trimBtn.disabled = true;
+      downloadBtn.disabled = true;
+      playBtn.textContent = '▶ Play';
+    
+      const blobURL = URL.createObjectURL(selectedFile);
+      if (wavesurfer) wavesurfer.destroy();
+    
+      const regionPlugin = WaveSurfer.Regions.create();
+    
+      wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: '#ff8500',
+        progressColor: '#e67e00',
+        height: 120,
+        normalize: true,
+        responsive: true,
+        backend: 'WebAudio',
+        plugins: [regionPlugin]
+      });
+    
+      await wavesurfer.load(blobURL);
+      wavesurfer.setVolume(1);
+      playBtn.disabled = false;
+    
+      regionPlugin.enableDragSelection({
+        color: 'rgba(255, 133, 0, 0.3)'
+      });
+    
+      regionPlugin.on('region-created', (r) => {
+        currentRegion = r;
+        updateTimeDisplay(r);
+        trimBtn.disabled = false;
+      });
+    
+      regionPlugin.on('region-updated', (r) => {
+        currentRegion = r;
+        updateTimeDisplay(r);
+      });
+    
+      wavesurfer.on('error', err => {
+        console.error("WaveSurfer error:", err);
+        alert("❌ Error loading audio.");
+      });
+    
+      wavesurfer.on('finish', () => {
+        playBtn.textContent = '▶ Play';
+      });
+    });
+    
+    playBtn.addEventListener('click', () => {
+      if (!wavesurfer) return;
+    
+      wavesurfer.setVolume(1);
+    
+      if (wavesurfer.isPlaying()) {
+        wavesurfer.pause();
+        playBtn.textContent = '▶ Play';
+      } else {
+        if (currentRegion) {
+          wavesurfer.play(currentRegion.start, currentRegion.end);
+        } else {
+          wavesurfer.play();
+        }
+        playBtn.textContent = '⏸ Pause';
+      }
+    });
+    
+    trimBtn.addEventListener('click', async () => {
+      console.log("🟠 Trim clicked");
+    
+      if (!selectedFile || !currentRegion) {
+        alert("Please upload a file and select a region first.");
+        return;
+      }
+    
+      const trimMode = document.querySelector('input[name="trimMode"]:checked').value;
+    
+      console.log("🎯 Start:", currentRegion.start, "End:", currentRegion.end);
+      console.log("🎚️ Trim mode:", trimMode);
+    
+      const formData = new FormData();
+      formData.append("audio", selectedFile);
+      formData.append("start", currentRegion.start);
+      formData.append("end", currentRegion.end);
+      formData.append("trim_mode", trimMode);
+    
+      try {
+        const res = await fetch("/trim_audio", {
+          method: "POST",
+          body: formData
+        });
+    
+        if (res.ok) {
+          const blob = await res.blob();
+          console.log("✅ Blob received. Size:", blob.size);
+    
+          if (blob.size === 0) {
+            alert("❌ Trim failed: empty file returned.");
+            return;
+          }
+    
+          const downloadURL = URL.createObjectURL(blob);
+          downloadBtn.href = downloadURL;
+          downloadBtn.download = "trimmed_audio.mp3";
+          downloadBtn.disabled = false;
+          downloadBtn.style.opacity = 1;
+          downloadBtn.style.pointerEvents = "auto";
+        } else {
+          alert("❌ Trimming failed.");
+        }
+      } catch (err) {
+        console.error("Trim Error:", err);
+        alert("An error occurred while trimming.");
+      }
+    });
+    </script>
+    
+</body>
+</html>

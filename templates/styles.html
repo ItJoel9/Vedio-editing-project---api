@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Styles (Canvas)</title>
+  <link rel="stylesheet" href="static/css/edit_styles.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    canvas {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    img { display: none; }
+  </style>
+</head>
+<body>
+  
+ <video autoplay muted loop playsinline id="bg-video">
+  <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+</video>
+  <nav id="sidebar">
+    
+    
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}"><span>
+      <i class="fa-solid fa-user"></span></i><span class="text">Login</span>
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}"><span>
+      <i class="fa-solid fa-chart-line"></span></i><span class="text">Dashboard</span>
+    </a>
+
+    <h2>Navigation</h2>
+    <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}"><span>
+      <i class="fa-solid fa-house"></span></i><span class="text">Home</span>
+    </a>
+    <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}"><Span>
+      <i class="fa-solid fa-clapperboard"></Span></i><span class="text">Transitions</span>
+    </a>
+    <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}"><span>
+      <i class="fa-solid fa-music"></span></i><span class="text">Trending Music</span>
+    </a>
+    <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}"><span>
+      <i class="fa-solid fa-palette"></span></i><span class="text">Edit Styles</span>
+    </a>
+    <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}"><span>
+      <i class="fa-solid fa-tv"></span></i><span class="text">Platforms</span>
+    </a>
+    <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}"><span>
+      <i class="fa-solid fa-mobile-screen-button"></span></i><span class="text">Apps</span>
+    </a>
+
+    <h2>Quick Tools</h2>
+    <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}"><span>
+      <i class="fa-solid fa-arrows-spin"></span></i><span class="text">Video Converter</span>
+    </a>
+    <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}"><span>
+      <i class="fa-solid fa-scissors"></span></i><span class="text">Audio Trimmer</span>
+    </a>
+    
+    <a href="https://motionarray.com/browse/stock-video/free/" target="_blank"><span>
+      <i class="fa-solid fa-download"></span></i><span class="text">Free Stock Video & Music</span>
+    </a>
+  </nav>
+  
+
+  <div class="content">
+    <header>
+      <h1><i class="fa-solid fa-palette"></i> Edit Styles (Canvas)</h1>
+      <p>Full image-based filter control</p>
+    </header>
+
+    <section class="preview-editor">
+      <div class="preview">
+        <h3>Live Preview</h3>
+        <img id="sourceImg" src="static/media/vc.png" alt="source image">
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <div class="editor-panel">
+        <h3>Style Controls</h3>
+        <label>Brightness</label><input type="range" id="brightness" min="0" max="2" step="0.01" value="1">
+        <label>Contrast</label><input type="range" id="contrast" min="0" max="4" step="0.01" value="1">
+        <label>Saturation</label><input type="range" id="saturation" min="0" max="3" step="0.01" value="1">
+        <label>Hue</label><input type="range" id="hue" min="-180" max="180" value="0">
+        <label>Gamma</label><input type="range" id="gamma" min="0.1" max="3" step="0.01" value="1">
+        <label>Temperature</label><input type="range" id="temperature" min="-100" max="100" value="0">
+        <label>Tint</label><input type="range" id="tint" min="-100" max="100" value="0">
+      </div>
+    </section>
+
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = document.getElementById("sourceImg");
+
+      const sliders = {
+        brightness: document.getElementById("brightness"),
+        contrast: document.getElementById("contrast"),
+        saturation: document.getElementById("saturation"),
+        hue: document.getElementById("hue"),
+        gamma: document.getElementById("gamma"),
+        temperature: document.getElementById("temperature"),
+        tint: document.getElementById("tint")
+      };
+
+      function rgbToHsl(r, g, b) {
+        r /= 255; g /= 255; b /= 255;
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+          h = s = 0;
+        } else {
+          const d = max - min;
+          s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+          switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+          }
+          h /= 6;
+        }
+        return [h, s, l];
+      }
+
+      function hslToRgb(h, s, l) {
+        let r, g, b;
+        if (s === 0) {
+          r = g = b = l;
+        } else {
+          const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+          };
+          const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+          const p = 2 * l - q;
+          r = hue2rgb(p, q, h + 1/3);
+          g = hue2rgb(p, q, h);
+          b = hue2rgb(p, q, h - 1/3);
+        }
+        return [r * 255, g * 255, b * 255];
+      }
+
+      function drawImageWithFilters() {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.drawImage(img, 0, 0);
+
+        const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = frame.data;
+
+        const b = parseFloat(sliders.brightness.value);
+        const c = parseFloat(sliders.contrast.value);
+        const s = parseFloat(sliders.saturation.value);
+        const gamma = parseFloat(sliders.gamma.value);
+        const hShift = parseFloat(sliders.hue.value);
+        const temp = parseFloat(sliders.temperature.value);
+        const tint = parseFloat(sliders.tint.value);
+
+        for (let i = 0; i < data.length; i += 4) {
+          let r = data[i], g = data[i + 1], bVal = data[i + 2];
+
+          // Gamma
+          r = 255 * Math.pow(r / 255, gamma);
+          g = 255 * Math.pow(g / 255, gamma);
+          bVal = 255 * Math.pow(bVal / 255, gamma);
+
+          // RGB -> HSL
+          let [h, sat, l] = rgbToHsl(r, g, bVal);
+
+          // Saturation & Hue
+          sat *= s;
+          h = (h + hShift / 360) % 1;
+
+          // HSL -> RGB
+          [r, g, bVal] = hslToRgb(h, sat, l);
+
+          // Brightness/Contrast
+          r = ((r - 128) * c + 128) * b;
+          g = ((g - 128) * c + 128) * b;
+          bVal = ((bVal - 128) * c + 128) * b;
+
+          // Temperature & Tint
+          r += temp;
+          bVal -= temp;
+          g += tint;
+          r -= tint;
+
+          data[i] = Math.min(255, Math.max(0, r));
+          data[i + 1] = Math.min(255, Math.max(0, g));
+          data[i + 2] = Math.min(255, Math.max(0, bVal));
+        }
+
+        ctx.putImageData(frame, 0, 0);
+      }
+
+      img.onload = drawImageWithFilters;
+      Object.values(sliders).forEach(slider => {
+        slider.addEventListener("input", drawImageWithFilters);
+      });
+    </script>
+
+<section class="style-explanation">
+  <h2>🎨 Understanding Style Controls</h2>
+  <p>Use these sliders to enhance your image and match your desired edit style. Here's what each one does:</p>
+  <ul>
+    <li><strong>Brightness:</strong> Lightens or darkens the image overall.</li>
+    <li><strong>Contrast:</strong> Increases difference between dark and light areas.</li>
+    <li><strong>Saturation:</strong> Boosts or tones down color intensity.</li>
+    <li><strong>Hue:</strong> Rotates the color spectrum to shift tones.</li>
+    <li><strong>Gamma:</strong> Adjusts midtone brightness without blowing out shadows/highlights.</li>
+    <li><strong>Temperature:</strong> Warms (orange) or cools (blue) the image color tone.</li>
+    <li><strong>Tint:</strong> Adds green or magenta tones to balance the image feel.</li>
+  </ul>
+</section>
+
+<section class="style-tutorials">
+  <h2>📺 Style Tutorials</h2>
+
+  <div class="tutorial-category">
+    <h3>🔥 Edit Style Tutorials</h3>
+    <div class="tutorials-grid">
+      <iframe width="100%" height="250" src="https://www.youtube.com/embed/D69izFE7ARI" title="Edit Style Tutorial" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <div class="tutorial-category">
+    <h3>💎 Quality Boost Tutorials</h3>
+    <div class="tutorials-grid">
+      <iframe width="100%" height="250" src="https://www.youtube.com/embed/Ey4QfTclCFg" title="Quality Boost Tutorial" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+</div>
+</body>
+</html>

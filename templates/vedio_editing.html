@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vdio hub</title>
+
+  <!-- Styles & Favicon -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+  
+  <style>
+    body.sidebar-expanded nav {
+      width: 250px;
+    }
+    body.sidebar-expanded .content {
+      margin-left: 270px;
+    }
+    nav {
+      transition: width 0.3s ease;
+    }
+    .content {
+      transition: margin-left 0.3s ease;
+    }
+    .tip-popup {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: #222;
+      border-left: 5px solid #ff8500;
+      color: #fff;
+      font-style: italic;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <nav id="sidebar">
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
+      <i class="fa-solid fa-user"></i><span class="text">Login</span>
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
+      <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
+    </a>
+
+    <h2>Navigation</h2>
+    <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
+      <i class="fa-solid fa-house"></i><span class="text">Home</span>
+    </a>
+    <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}">
+      <i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span>
+    </a>
+    <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}">
+      <i class="fa-solid fa-music"></i><span class="text">Trending Music</span>
+    </a>
+    <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}">
+      <i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span>
+    </a>
+    <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}">
+      <i class="fa-solid fa-tv"></i><span class="text">Platforms</span>
+    </a>
+    <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}">
+      <i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span>
+    </a>
+
+    <h2>Quick Tools</h2>
+    <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}">
+      <i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span>
+    </a>
+    <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
+      <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
+    </a>
+    <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
+      <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content">
+    <header>
+      <h1><img src="{{ url_for('static', filename='media/v.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">dio</h1>
+      <p>Clueless? yeah me too</p>
+    </header>
+
+    <!-- Search Section -->
+    <div class="search-section">
+      <h2>Find Something New</h2>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for tools, tutorials, or videos...">
+        <button>Search</button>
+        <button class="tip-button">Tip of the Day</button>
+      </div>
+      <div class="tip-popup" id="tipPopup">
+        <p></p>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+      <video autoplay loop muted>
+        <source src="{{ url_for('static', filename='media/v1.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <h2>Search For Your Style</h2>
+    </div>
+
+    <!-- Challenges -->
+    <div class="challenges">
+      <h2>Video Editing Challenges</h2>
+      <p>Participate in our weekly challenges and showcase your creativity!</p>
+      <a href="{{ url_for('challenges_page') }}" class="cta-button">Join the Challenge</a>
+    </div>
+
+    <!-- Reels -->
+    <section class="trending-edits">
+      <h2>Trending Edits</h2>
+      <div class="reels-container">
+        {% for vid in ['Last of us Edit.mp4', 'Spider man test.mp4', 'v1.mp4', 'kratos.mp4', 'Cap Event.mp4', 'METANOIA_N.mov'] %}
+        <div class="reel">
+          <video class="reel-thumbnail" autoplay loop muted>
+            <source src="{{ url_for('static', filename='media/' ~ vid) }}" type="video/mp4">
+          </video>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Video Editing Hub | All Rights Reserved</p>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div id="reelModal" class="reel-modal">
+    <div class="modal-content">
+      <video id="modalVideo" autoplay loop controls></video>
+      <button class="close-modal">&times;</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    sidebar.addEventListener('mouseenter', () => document.body.classList.add('sidebar-expanded'));
+    sidebar.addEventListener('mouseleave', () => document.body.classList.remove('sidebar-expanded'));
+
+    // 🔍 Search Routing
+    const searchBtn = document.querySelector('.search-bar button');
+    const searchInput = document.querySelector('.search-bar input');
+
+    searchBtn.addEventListener('click', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      if (!query) return;
+
+      if (query.includes('transition')) {
+        window.location.href = "{{ url_for('transitions_page') }}";
+      } else if (query.includes('music')) {
+        window.location.href = "{{ url_for('music_page') }}";
+      } else if (query.includes('style')) {
+        window.location.href = "{{ url_for('styles_page') }}";
+      } else if (query.includes('platform')) {
+        window.location.href = "{{ url_for('platforms_page') }}";
+      } else if (query.includes('app')) {
+        window.location.href = "{{ url_for('apps_page') }}";
+      } else if (query.includes('converter')) {
+        window.location.href = "{{ url_for('converter_page') }}";
+      } else if (query.includes('trimmer')) {
+        window.location.href = "{{ url_for('trimmer_page') }}";
+      } else if (query.includes('dashboard')) {
+        window.location.href = "{{ url_for('dashboard') }}";
+      } else if (query.includes('login')) {
+        window.location.href = "{{ url_for('login_page') }}";
+      } else {
+        alert("Sorry! We couldn't find anything for: " + query);
+      }
+    });
+
+    // 💡 Tip of the Day Logic
+    const tips = [
+      "Use slow-motion to add drama to emotional scenes.",
+      "Cut to the beat of music for rhythmic flow.",
+      "Use zoom transitions to create intensity between shots.",
+      "Keep your clips short — attention spans are short too.",
+      "Color grade to match the mood — warm = happy, cold = serious.",
+      "Match motion across cuts for seamless transitions.",
+      "Add sound effects to enhance realism in B-roll.",
+      "Use L-cuts and J-cuts for smoother dialogue scenes.",
+      "Don’t overuse transitions — simple cuts often hit harder.",
+      "Always keep your project resolution and frame rate consistent."
+    ];
+
+    const tipBox = document.getElementById("tipPopup");
+    const tipBtn = document.querySelector(".tip-button");
+
+    function showRandomTip() {
+      const randomIndex = Math.floor(Math.random() * tips.length);
+      tipBox.querySelector("p").innerText = tips[randomIndex];
+    }
+
+    window.addEventListener("DOMContentLoaded", showRandomTip);
+
+    tipBtn.addEventListener("click", () => {
+      showRandomTip();
+      tipBox.style.display = tipBox.style.display === "block" ? "none" : "block";
+    });
+  </script>
+
+  <script src="{{ url_for('static', filename='js/scripthome.js') }}"></script>
+</body>
+</html>

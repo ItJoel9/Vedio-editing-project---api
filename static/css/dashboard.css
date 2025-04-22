@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #0f0f0f, #1a1a1a);
+  color: #fff;
+  display: flex;
+}
+
+/* --- SIDEBAR NAVIGATION (REPLACED) --- */
+nav {
+  width: 60px;
+  background: #1a1a1a;
+  height: 100vh;
+  padding: 20px 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s ease;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+nav::-webkit-scrollbar {
+  display: none;
+}
+nav:hover {
+  width: 250px;
+}
+nav h2 {
+  color: #ffffff;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+nav:hover h2 {
+  opacity: 1;
+}
+nav a {
+  display: flex;
+  align-items: center;
+  color: #ff8500;
+  text-decoration: none;
+  padding: 12px 15px;
+  margin: 6px 0;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+nav a i {
+  font-size: 1.6rem;
+  min-width: 30px;
+  text-align: center;
+}
+nav a .text {
+  margin-left: 15px;
+  display: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+nav:hover a .text {
+  display: inline-block;
+  opacity: 1;
+}
+nav a:hover {
+  background: linear-gradient(120deg, #ff8500, #e67e00);
+  color: #fff;
+  transform: scale(1.05);
+}
+nav a.active {
+  background: #ff8500;
+  color: #fff;
+}
+nav a.active i,
+nav a.active .text {
+  color: #fff;
+}
+
+/* --- MAIN CONTENT SHIFT (unchanged) --- */
+.content {
+  margin-left: 80px;
+  padding: 40px 30px;
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+}
+nav:hover ~ .content {
+  margin-left: 250px;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+header h1 {
+  color: #ff8500;
+  font-size: 2.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+header img {
+  width: 42px;
+}
+
+/* Profile Card */
+.profile-card {
+  text-align: center;
+  margin-bottom: 50px;
+  background: #1f1f1f;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+.profile-card img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid #ff8500;
+  object-fit: cover;
+}
+.profile-card input,
+.profile-card button {
+  margin: 6px;
+}
+
+/* XP Bar */
+.xp-bar {
+  background: #2d2d2d;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 26px;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
+}
+.xp-fill {
+  background: linear-gradient(to right, #ff8500, #ffcc00);
+  height: 100%;
+  line-height: 26px;
+  color: #000;
+  text-align: center;
+  font-weight: bold;
+  transition: width 0.4s ease-in-out;
+}
+
+/* Achievements */
+.achievements .badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 10px;
+  margin-top: 20px;
+}
+.badge {
+  background: linear-gradient(135deg, #0a0a0a, #1b1b1b);
+  padding: 24px;
+  border: 2px solid #c8aa6e;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(200, 170, 110, 0.15);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+.badge:hover {
+  transform: scale(1.05);
+  background: linear-gradient(145deg, #1e1e1e, #111);
+  box-shadow: 0 10px 25px rgba(200, 170, 110, 0.3);
+}
+.badge::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border-radius: 22px;
+  background: radial-gradient(circle, rgba(200, 170, 110, 0.1), transparent);
+  z-index: -1;
+  opacity: 0.25;
+  transition: opacity 0.3s ease;
+}
+.badge i {
+  color: #e4c96f;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.1);
+}
+.badge p {
+  margin-top: 8px;
+  color: #f5f5dc;
+  font-weight: 700;
+  font-size: 16px;
+  text-shadow: 0 0 4px rgba(200, 170, 110, 0.1);
+  letter-spacing: 0.6px;
+}
+
+.achievement-detail {
+  background: #141414;
+  border: 2px solid #444;
+  border-radius: 14px;
+  padding: 22px;
+  margin-top: 25px;
+  text-align: center;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.1);
+}
+.achievement-detail i {
+  font-size: 3rem;
+  color: #e4c96f;
+}
+.achievement-detail h3, .achievement-detail p {
+  color: #eee;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+/* Stats Section */
+.stats ul {
+  list-style: none;
+  padding-left: 0;
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.stats li {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+/* Profile Pic Buttons */
+.pfp-options {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.pfp-btn {
+  background: #ff8500;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 14px;
+}
+.pfp-btn:hover {
+  background: #e67e00;
+}
+
+/* Background Video */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+  opacity: 0.25;
+  pointer-events: none;
+}

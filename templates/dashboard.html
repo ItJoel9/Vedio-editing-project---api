@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vdio | Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+  
+</head>
+<body>
+
+  <nav id="sidebar">
+    
+    
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
+      <i class="fa-solid fa-user"></i><span class="text">Login</span>
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
+      <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
+    </a>
+
+    <h2>Navigation</h2>
+    <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
+      <i class="fa-solid fa-house"></i><span class="text">Home</span>
+    </a>
+    <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}">
+      <i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span>
+    </a>
+    <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}">
+      <i class="fa-solid fa-music"></i><span class="text">Trending Music</span>
+    </a>
+    <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}">
+      <i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span>
+    </a>
+    <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}">
+      <i class="fa-solid fa-tv"></i><span class="text">Platforms</span>
+    </a>
+    <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}">
+      <i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span>
+    </a>
+
+    <h2>Quick Tools</h2>
+    <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}">
+      <i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span>
+    </a>
+    <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
+      <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
+    </a>
+    
+    <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
+      <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
+    </a>
+  </nav>
+
+<div class="content">
+  <header>
+    <h1><img src="{{ url_for('static', filename='media/v.png') }}" alt="V Logo">dio</h1>
+    <p>Account Dashboard</p>
+  </header>
+
+  <section class="profile-card">
+    <img id="profilePic" src="{{ url_for('static', filename='uploads/pfps/' + user_profile_pic) }}" alt="Profile Picture">
+
+    <h2 id="userName">Welcome, {{ user_name }}</h2>
+    <span id="userEmail">{{ user_email }}</span>
+    <span id="userXP" style="display:none;">{{ user_exp }}</span>
+    
+  </section>
+
+  <div class="pfp-options">
+    <label for="pfpInput" class="pfp-btn"><i class="fa-solid fa-upload"></i> Upload Photo</label>
+    <input type="file" id="pfpInput" accept="image/*" style="display:none;">
+    <button onclick="startCamera()" class="pfp-btn"><i class="fa-solid fa-camera"></i> Use Camera</button>
+  </div>
+
+  <video id="camera" autoplay style="display:none; margin-top:10px; border-radius: 10px;" width="200"></video>
+  <button onclick="capturePhoto()" id="snapBtn" style="display:none;" class="pfp-btn">📸 Snap Photo</button>
+
+  <section class="xp-section">
+    <h2>XP Progress</h2>
+    <div class="xp-bar">
+      <div class="xp-fill" id="xpFill">0 / 0 XP</div>
+    </div>
+  </section>
+
+  <section class="achievements">
+    <h2>Achievements</h2>
+    <div class="badge-grid" id="badgeGrid">
+      <div class="badge" data-id="firstEdit"><i class="fa-solid fa-scissors"></i><p>First Edit</p></div>
+      <div class="badge" data-id="xp100"><i class="fa-solid fa-star"></i><p>100 XP Club</p></div>
+      <div class="badge" data-id="xp250"><i class="fa-solid fa-crown"></i><p>Quarter King</p></div>
+      <div class="badge" data-id="xp500"><i class="fa-solid fa-trophy"></i><p>Halfway Hero</p></div>
+    </div>
+    <div class="achievement-detail" id="achievementDetail">
+      <div id="detailIcon"><i class="fa-solid fa-medal"></i></div>
+      <h3 id="detailTitle">Achievement Title</h3>
+      <p id="detailDesc">Achievement Description</p>
+      <p><strong id="detailProgress">0 / 0</strong></p>
+    </div>
+  </section>
+
+  <section class="stats">
+    <h2>Activity Summary</h2>
+    <ul>
+      <li><strong>Total Edits:</strong> 17</li>
+      <li><strong>Last Tool Used:</strong> Audio Trimmer</li>
+      <li><strong>Active Days:</strong> 5</li>
+    </ul>
+  </section>
+
+  <section class="video-import">
+    <h2><i class="fa-solid fa-upload"></i> Import Your Videos</h2>
+    <form action="/upload_dashboard_video" method="POST" enctype="multipart/form-data">
+      <input type="file" name="dashboard_video" accept="video/*" required>
+      <button type="submit"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+    </form>
+
+    <div id="dashboardVideoList" class="uploaded-videos">
+      {% for vid in videos %}
+        <video src="{{ url_for('static', filename='uploads/videos/' + vid.filename) }}" controls autoplay loop muted style="width:250px; margin:10px;"></video>
+      {% endfor %}
+    </div>
+  </section>
+
+<!-- everything above remains unchanged -->
+
+<script>
+  const pfpInput = document.getElementById("pfpInput");
+  pfpInput.addEventListener("change", () => {
+    const file = pfpInput.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      fetch("/upload_profile_pic", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          document.getElementById("profilePic").src = `/static/uploads/pfps/${data.filename}`;
+        } else {
+          alert("Upload failed: " + data.msg);
+        }
+      })
+      .catch(err => {
+        console.error("Upload error:", err);
+        alert("Something went wrong while uploading the profile picture.");
+      });
+    }
+  });
+
+  function startCamera() {
+    const video = document.getElementById("camera");
+    const snapBtn = document.getElementById("snapBtn");
+    video.style.display = "block";
+    snapBtn.style.display = "inline";
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error("Camera access failed:", err);
+        alert("Camera not accessible.");
+      });
+  }
+
+  function capturePhoto() {
+    const video = document.getElementById("camera");
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    canvas.toBlob(blob => {
+      const formData = new FormData();
+      formData.append("file", blob, "camera_capture.png");
+
+      fetch("/upload_profile_pic", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          document.getElementById("profilePic").src = `/static/uploads/pfps/${data.filename}`;
+        } else {
+          alert("Upload failed: " + data.msg);
+        }
+      })
+      .catch(err => {
+        console.error("Camera upload failed:", err);
+        alert("Failed to upload photo from camera.");
+      });
+    }, "image/png");
+
+    video.srcObject.getTracks().forEach(track => track.stop());
+    video.style.display = "none";
+    document.getElementById("snapBtn").style.display = "none";
+  }
+
+  function updateXPDisplay() {
+    const xpFill = document.getElementById("xpFill");
+    const totalDisplay = document.getElementById("totalExpDisplay");
+
+    let userXP = parseInt(document.getElementById("userXP").textContent || "0");
+    let xpMax = parseInt(localStorage.getItem("xpMax") || "100");
+
+    const storedXP = parseInt(localStorage.getItem("userXP"));
+    if (!isNaN(storedXP) && storedXP > userXP) {
+      userXP = storedXP;
+    }
+
+    xpFill.style.width = Math.min((userXP / xpMax) * 100, 100) + "%";
+    xpFill.textContent = `${userXP} / ${xpMax} XP`;
+    totalDisplay.textContent = userXP;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const userEmailElement = document.getElementById('userEmail');
+    const storedEmail = localStorage.getItem('userEmail');
+    userEmailElement.textContent = storedEmail || 'No email found';
+
+    updateXPDisplay();
+  });
+
+  document.addEventListener("expUpdated", function (e) {
+    const earned = e.detail.newExp;
+    let currentXP = parseInt(localStorage.getItem("userXP") || "0");
+    currentXP += earned;
+    localStorage.setItem("userXP", currentXP);
+    updateXPDisplay();
+
+    fetch("/update_exp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ exp: currentXP })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        console.log("✅ XP synced to Mongo");
+      } else {
+        console.warn("❌ XP sync failed:", data.message);
+      }
+    })
+    .catch(err => console.error("❌ XP sync error:", err));
+  });
+</script>
+
+</body>
+</html>
+
+</body>
+</html>

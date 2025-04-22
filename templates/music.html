@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vdio | Trending Music</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/music.css') }}">
+</head>
+<body>
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}"><i class="fa-solid fa-user"></i><span class="text">Login</span></a>
+    <a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span></a>
+
+    <h2>Navigation</h2>
+    <a href="{{ url_for('home') }}"><i class="fa-solid fa-house"></i><span class="text">Home</span></a>
+    <a href="{{ url_for('transitions_page') }}"><i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span></a>
+    <a href="{{ url_for('music_page') }}" class="active"><i class="fa-solid fa-music"></i><span class="text">Trending Music</span></a>
+    <a href="{{ url_for('styles_page') }}"><i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span></a>
+    <a href="{{ url_for('platforms_page') }}"><i class="fa-solid fa-tv"></i><span class="text">Platforms</span></a>
+    <a href="{{ url_for('apps_page') }}"><i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span></a>
+
+    <h2>Quick Tools</h2>
+    <a href="{{ url_for('converter_page') }}"><i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span></a>
+    <a href="{{ url_for('trimmer_page') }}"><i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span></a>
+    <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
+      <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main">
+    <header>
+      <h1><i class="fa-solid fa-music"></i> Trending Music</h1>
+      <p>Click a genre below to view the top 10 trending songs</p>
+    </header>
+
+    <!-- Filter Buttons -->
+    <div class="filter-buttons" id="genreFilters">
+      {% for genre in genre_tracks %}
+        <button onclick="showGenre('{{ genre }}', this)">{{ genre.replace('_', ' ').title() }}</button>
+      {% endfor %}
+    </div>
+
+    <!-- Genre Sections -->
+    <div id="track-container">
+      {% for genre, tracks in genre_tracks.items() %}
+      <ol class="ranking-list" id="list-{{ genre }}">
+        {% for track in tracks %}
+        <li class="ranking-item">
+          <div class="ranking-track">
+            <span class="ranking-number">{{ loop.index }}</span>
+            <iframe src="https://open.spotify.com/embed/track/{{ track.spotify_id }}" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <div class="vote-icons" data-track="{{ track.spotify_id }}">
+              <i class="fa-solid fa-heart" onclick="toggleVote(this, '{{ track.spotify_id }}', 'like')"></i>
+              <i class="fa-solid fa-heart-crack" onclick="toggleVote(this, '{{ track.spotify_id }}', 'dislike')"></i>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    function showGenre(tag, button = null) {
+      document.querySelectorAll('.ranking-list').forEach(list => list.classList.remove('active'));
+      document.querySelector(`#list-${tag}`)?.classList.add('active');
+
+      document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
+      if (button) button.classList.add('active');
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const defaultTag = "lofi";
+      const defaultBtn = document.querySelector(`button[onclick*="${defaultTag}"]`);
+      if (defaultBtn) showGenre(defaultTag, defaultBtn);
+    });
+
+    function toggleVote(el, trackId, voteType) {
+      const parent = el.closest(".vote-icons");
+      const heart = parent.querySelector(".fa-heart");
+      const crack = parent.querySelector(".fa-heart-crack");
+
+      if (el.classList.contains("active")) {
+        el.classList.remove("active");
+        sendVote(trackId, null);
+        return;
+      }
+
+      if (voteType === "like") {
+        heart.classList.add("active");
+        crack.classList.remove("active");
+      } else {
+        crack.classList.add("active");
+        heart.classList.remove("active");
+      }
+
+      sendVote(trackId, voteType);
+    }
+
+    function sendVote(trackId, vote) {
+      fetch("/vote_track", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ track_id: trackId, vote: vote })
+      }).then(res => {
+        if (!res.ok) alert("Error recording vote.");
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apps</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/apps.css') }}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    .section-title {
+      font-size: 1.6rem;
+      margin: 40px 0 20px;
+      border-bottom: 2px solid #444;
+      padding-bottom: 10px;
+      color: #ff8500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rank-badge {
+      padding: 5px 12px;
+      font-size: 0.9rem;
+      border-radius: 30px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .noob { background: #00ff95; }
+    .mid { background: #f7d200; }
+    .pro { background: #ff3c3c; color: white; }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    .card h3 {
+      color: #ff8500;
+      margin-top: 0;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #ff8500;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+  
+  <!-- Navbar -->
+  <nav id="sidebar">
+    
+    
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
+      <i class="fa-solid fa-user"></i><span class="text">Login</span>
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
+      <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
+    </a>
+
+    <h2>Navigation</h2>
+    <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
+      <i class="fa-solid fa-house"></i><span class="text">Home</span>
+    </a>
+    <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}">
+      <i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span>
+    </a>
+    <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}">
+      <i class="fa-solid fa-music"></i><span class="text">Trending Music</span>
+    </a>
+    <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}">
+      <i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span>
+    </a>
+    <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}">
+      <i class="fa-solid fa-tv"></i><span class="text">Platforms</span>
+    </a>
+    <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}">
+      <i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span>
+    </a>
+
+    <h2>Quick Tools</h2>
+    <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}">
+      <i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span>
+    </a>
+    <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
+      <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
+    </a>
+    
+    <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
+      <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content">
+    <header>
+      <h1><i class="fa-solid fa-mobile-screen-button"></i> Editing Apps</h1>
+      <p>Confused what app to start with? Here's a quick guide on the top editing apps — who they’re for, what’s great, and what sucks.</p>
+    </header>
+
+    <!-- 🟢 Beginner -->
+    <h2 class="section-title"><span class="rank-badge noob">🟢 Beginner</span> Noob-Friendly Apps</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>CapCut</h3>
+        <p><strong>Best for:</strong> Beginners, social media editors</p>
+        <p><strong>Pros:</strong> Easy to use, tons of trendy templates, auto-captions, built-in effects</p>
+        <p><strong>Cons:</strong> Limited control for complex edits, watermarked exports (unless logged in)</p>
+        <a class="btn" href="https://www.capcut.com/" target="_blank">Visit CapCut</a>
+      </div>
+
+      <div class="card">
+        <h3>LightCut</h3>
+        <p><strong>Best for:</strong> Fast social edits, reels, auto-generating content</p>
+        <p><strong>Pros:</strong> AI suggestions, super fast workflow, beginner-friendly</p>
+        <p><strong>Cons:</strong> Lacks advanced manual control, mostly template-based</p>
+        <a class="btn" href="https://lightcut.app/" target="_blank">Try LightCut</a>
+      </div>
+    </div>
+
+    <!-- 🟡 Intermediate -->
+    <h2 class="section-title"><span class="rank-badge mid">🟡 Intermediate</span> Semi-Pro Apps</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>VN Editor</h3>
+        <p><strong>Best for:</strong> Intermediate mobile editors</p>
+        <p><strong>Pros:</strong> Layer-based timeline, speed ramping, keyframe support</p>
+        <p><strong>Cons:</strong> Lacks heavy visual effects, UI can feel cramped on small screens</p>
+        <a class="btn" href="https://www.vlognow.me/" target="_blank">Visit VN</a>
+      </div>
+    </div>
+
+    <!-- 🔴 Pro -->
+    <h2 class="section-title"><span class="rank-badge pro">🔴 Pro</span> Advanced Editors</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>DaVinci Resolve</h3>
+        <p><strong>Best for:</strong> Advanced editors, color grading pros, short film makers</p>
+        <p><strong>Pros:</strong> Hollywood-level color tools, node-based VFX, free version is powerful</p>
+        <p><strong>Cons:</strong> Steep learning curve, requires a beefy PC</p>
+        <a class="btn" href="https://www.blackmagicdesign.com/products/davinciresolve/" target="_blank">Get Resolve</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

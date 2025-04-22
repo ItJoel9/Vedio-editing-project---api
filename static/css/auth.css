@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1a1a1a;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+
+  background-image: url("/static/media/v.png");
+  background-size: 172%; /* Preserved */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3); /* Lightened for subtle contrast */
+  z-index: 0;
+}
+
+.auth-container {
+  position: relative;
+  z-index: 1;
+  background: rgba(25, 25, 25, 0.85); /* translucent glassy dark */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 40px 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.auth-container:hover {
+  transform: translateY(-2px);
+}
+
+.logo {
+  width: 40px;
+  margin-bottom: 15px;
+}
+
+.auth-container h2 {
+  color: #ff8500;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.auth-container input {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: #3a3a3a;
+  color: #fff;
+  font-size: 1rem;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.auth-container input:focus {
+  outline: none;
+  background: #444;
+  box-shadow: 0 0 0 2px #ff8500;
+}
+
+.auth-container button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #ff8500;
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.auth-container button:hover {
+  background: #e67e00;
+  transform: scale(1.02);
+}
+
+.toggle-btn {
+  margin-top: 15px;
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.toggle-btn:hover {
+  color: #ddd;
+}
+
+.toggle-btn span {
+  color: #ff8500;
+  font-weight: 500;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 450px) {
+  .auth-container {
+    padding: 30px 20px;
+  }
+}

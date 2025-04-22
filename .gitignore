@@ -1,0 +1,19 @@
+# virtual env
+venv
+
+# folders
+uploads
+temp_sessions
+converted
+flask_session
+flask_sessions
+
+# media uploads
+media/uploads
+
+
+
+# spotify
+client_secret.json
+.cache
+.env

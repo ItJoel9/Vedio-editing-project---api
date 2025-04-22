@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vdio Editor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/editor_test.css') }}">
+
+  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Left Sidebar -->
+    <div class="left-sidebar">
+      <div>
+        <h3>📂 Import</h3>
+        <input type="file" id="mediaInput" accept="video/*,audio/*" multiple>
+        <div id="mediaLibrary"></div>
+
+        <h4>🎛 Tools</h4>
+        <ul>
+          <li>🎵 Audio</li>
+          <li>📝 Text</li>
+          <li>🎭 Stickers</li>
+          <li>✨ Effects</li>
+          <li>🔁 Transitions</li>
+        </ul>
+      </div>
+      <button>+ Add Track</button>
+    </div>
+
+    <!-- Workspace -->
+    <div class="workspace">
+      <!-- Preview -->
+      <div class="preview">
+        <video id="videoPreview" controls></video>
+        <div class="preview-controls">
+          <button id="playPauseBtn">▶ Play</button>
+          <div class="trim-controls">
+            <label>Start:
+              <input type="number" id="trimStart" value="0" min="0">
+            </label>
+            <label>End:
+              <input type="number" id="trimEnd" value="10" min="1">
+            </label>
+            <button id="applyTrimBtn">✂ Trim</button>
+            <button id="cutButton">✂ Cut at Playhead</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline-container">
+        <div class="timeline" id="timeline">
+          <div class="track" id="videoTrack"></div>
+          <div class="playhead" id="playhead"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="right-sidebar">
+      <div>
+        <h3>🔍 Clip Info</h3>
+        <p id="details">Select a clip to view info</p>
+      </div>
+      <div>
+        <button id="trimButton">Quick Trim</button>
+        <button id="exportButton">⬇ Export</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

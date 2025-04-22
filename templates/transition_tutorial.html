@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transition Tutorial</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/learner.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+ 
+</head>
+<body>
+
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+  
+  <!-- Sidebar Nav -->
+  <nav id="sidebar">
+    
+    
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
+      <i class="fa-solid fa-user"></i><span class="text">Login</span>
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
+      <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
+    </a>
+
+    <h2>Navigation</h2>
+    <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
+      <i class="fa-solid fa-house"></i><span class="text">Home</span>
+    </a>
+    <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}">
+      <i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span>
+    </a>
+    <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}">
+      <i class="fa-solid fa-music"></i><span class="text">Trending Music</span>
+    </a>
+    <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}">
+      <i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span>
+    </a>
+    <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}">
+      <i class="fa-solid fa-tv"></i><span class="text">Platforms</span>
+    </a>
+    <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}">
+      <i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span>
+    </a>
+
+    <h2>Quick Tools</h2>
+    <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}">
+      <i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span>
+    </a>
+    <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
+      <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
+    </a>
+    
+    <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
+      <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
+    </a>
+  </nav>
+
+  <div class="main">
+    <h1><i class="fa-solid fa-clapperboard"></i> Transition Tutorial</h1>
+
+    {% if video_id %}
+      <div id="ytPlayer"></div>
+      <div class="status" id="statusArea">🎬 Watch till the end to complete and earn EXP.</div>
+      <div class="earned-exp" id="earnedExp"></div>
+
+      <div class="divider">Try it Yourself 👇</div>
+      <a href="https://www.kapwing.com/video-editor?edit=67fb8035e363afea1a939b68" target="_blank" class="editor-btn">Open Full Editor in Kapwing</a>
+
+      <div class="extra-box">
+        <h3>🔥 Pro Tip:</h3>
+        <p>Use this transition between two similar clips for a smooth zoom effect. Perfect for reels & B-roll.</p>
+      </div>
+    {% else %}
+      <p class="status">No video ID provided.</p>
+    {% endif %}
+
+    <a href="{{ url_for('transitions_page') }}" class="back-link">← Back to Transitions</a>
+  </div>
+
+  <div id="expPopup" class="exp-popup">+30 EXP Earned!</div>
+
+  <!-- YouTube API and EXP Logic -->
+  <script>
+    const videoId = "{{ video_id }}";
+    const userId = "{{ user_id }}";
+    let expGiven = false;
+    let player;
+  
+    // Unique key per user to avoid shared progress
+    const localKey = `completed_tuts_${userId}`;
+    const completed = JSON.parse(localStorage.getItem(localKey) || "[]");
+    const alreadyCompleted = completed.includes(videoId);
+  
+    function markCompletedUI() {
+      const status = document.getElementById("statusArea");
+      const exp = document.getElementById("earnedExp");
+  
+      status.textContent = "✅ Already Completed";
+      exp.textContent = "+30 EXP Earned!";
+      document.dispatchEvent(new CustomEvent("expUpdated", { detail: { newExp: 30 } }));
+    }
+  
+    if (alreadyCompleted) markCompletedUI();
+  
+    function onYouTubeIframeAPIReady() {
+      if (!videoId) return;
+  
+      player = new YT.Player("ytPlayer", {
+        height: "500",
+        width: "100%",
+        videoId: videoId,
+        events: {
+          onStateChange: onPlayerStateChange
+        }
+      });
+    }
+  
+    function onPlayerStateChange(event) {
+      const completed = JSON.parse(localStorage.getItem(localKey) || "[]");
+      const alreadyCompleted = completed.includes(videoId);
+  
+      if (event.data === YT.PlayerState.ENDED && !expGiven && !alreadyCompleted) {
+        expGiven = true;
+  
+        // If user is a guest, block EXP gain
+        if (userId === "guest") {
+          document.getElementById("statusArea").textContent = "⚠️ Login to earn EXP.";
+          return;
+        }
+  
+        // Otherwise give EXP and store progress
+        fetch("/update_exp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id: userId, exp: 30 })
+        })
+          .then((res) => res.json())
+          .then(() => {
+            completed.push(videoId);
+            localStorage.setItem(localKey, JSON.stringify(completed));
+            markCompletedUI();
+  
+            const popup = document.getElementById("expPopup");
+            popup.classList.add("show");
+            setTimeout(() => popup.classList.remove("show"), 3000);
+          })
+          .catch(() => {
+            document.getElementById("statusArea").textContent = "❌ EXP update failed.";
+          });
+      }
+    }
+  
+    // Load YouTube API
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+  
+    // Edge case: if API already loaded
+    setTimeout(() => {
+      if (typeof YT !== "undefined" && YT.loaded && typeof YT.Player === "function") {
+        onYouTubeIframeAPIReady();
+      }
+    }, 1500);
+  </script>
+  
+  
+</body>
+</html>

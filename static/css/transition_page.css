@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #0a0a0a;
+  color: #fff;
+}
+
+.transition-header {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.transition-header h1 {
+  font-size: 2.5rem;
+  color: #ff8500;
+}
+
+.transition-header p {
+  font-size: 1.1rem;
+  color: #ccc;
+  margin-top: 10px;
+}
+
+.transition-preview {
+  text-align: center;
+  padding: 20px;
+}
+
+.transition-preview video {
+  width: 90%;
+  max-width: 700px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(255, 133, 0, 0.2);
+}
+
+.transition-editor {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.transition-editor h2 {
+  color: #ff8500;
+  margin-bottom: 20px;
+}
+
+
+.transition-editor iframe {
+  width: 95%;
+  height: 600px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(255, 133, 0, 0.3);
+}
+
+
+nav {
+  width: 60px;
+  background: #1a1a1a;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 20px 10px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s ease;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+nav::-webkit-scrollbar {
+  display: none;
+}
+nav:hover {
+  width: 250px;
+}
+nav h2 {
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 15px 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+nav:hover h2 {
+  opacity: 1;
+}
+nav a {
+  display: flex;
+  align-items: center;
+  color: #ff8500;
+  text-decoration: none;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+nav a:hover {
+  background: linear-gradient(120deg, #ff8500, #e67e00);
+  color: #ffffff;
+  transform: scale(1.05);
+}
+nav a span {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+nav a span.text {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+nav:hover a span.text {
+  display: inline-block;
+  opacity: 1;
+}
+
+/* Push main content right */
+.main-content {
+  margin-left: 80px;
+  padding: 40px 20px;
+  transition: margin-left 0.3s ease;
+}
+nav:hover ~ .main-content {
+  margin-left: 270px;
+}
