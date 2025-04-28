@@ -1,327 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Platforms</title>
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png"/>
+  <title>Platform Cheat Sheets</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/plat_style.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: #121212;
-      color: #eee;
-    }
-
-    header {
-      padding: 40px 20px 20px;
-      text-align: center;
-    }
-
-    header h1 {
-      color: #ff8500;
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-
-    header p {
-      font-size: 1rem;
-      color: #aaa;
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      padding: 20px 40px;
-    }
-
-    .card {
-      background: #1e1e1e;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 4px 15px rgba(255, 133, 0, 0.08);
-      transition: transform 0.3s ease;
-      text-align: center;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card h3 {
-      color: #ff8500;
-      margin-bottom: 10px;
-    }
-
-    .card p {
-      color: #bbb;
-      font-size: 0.95rem;
-      margin-bottom: 15px;
-    }
-
-    .card button {
-      background: #ff8500;
-      color: white;
-      padding: 12px 18px;
-      border: none;
-      cursor: pointer;
-      border-radius: 6px;
-      font-weight: bold;
-      margin-top: 10px;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .card button:hover {
-      background: #e67e00;
-      transform: scale(1.05);
-    }
-
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-      backdrop-filter: blur(8px);
-    }
-
-    .modal.hidden {
-      display: none;
-    }
-
-    .modal-content {
-      background: rgba(34, 34, 34, 0.95);
-      padding: 30px;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 420px;
-      color: white;
-      box-shadow: 0 0 20px rgba(255, 133, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      animation: slideUp 0.4s ease;
-    }
-
-    .modal-content input,
-    .modal-content textarea,
-    .modal-content select {
-      width: 100%;
-      margin: 10px 0;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #333;
-      color: #fff;
-      font-size: 0.95rem;
-      transition: background 0.3s;
-    }
-
-    .modal-content input:focus,
-    .modal-content textarea:focus,
-    .modal-content select:focus {
-      background: #444;
-      outline: none;
-    }
-
-    @keyframes slideUp {
-      from {
-        transform: translateY(30px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    #youtubeFields {
-      display: none;
-    }
-  </style>
 </head>
+
 <body>
 
-  
-    <nav id="sidebar">
-    
-    
-      <h2>Account</h2>
-      <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
-        <i class="fa-solid fa-user"></i><span class="text">Login</span>
-      </a>
-      <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
-        <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
-      </a>
-  
-      <h2>Navigation</h2>
-      <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
-        <i class="fa-solid fa-house"></i><span class="text">Home</span>
-      </a>
-      <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}">
-        <i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span>
-      </a>
-      <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}">
-        <i class="fa-solid fa-music"></i><span class="text">Trending Music</span>
-      </a>
-      <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}">
-        <i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span>
-      </a>
-      <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}">
-        <i class="fa-solid fa-tv"></i><span class="text">Platforms</span>
-      </a>
-      <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}">
-        <i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span>
-      </a>
-  
-      <h2>Quick Tools</h2>
-      <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}">
-        <i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span>
-      </a>
-      <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
-        <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
-      </a>
-      
-      <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
-        <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
-      </a>
-    </nav>
-  
+<!-- Sidebar -->
+<nav>
+    <h2>Account</h2>
+    <a href="{{ url_for('login_page') }}"><i class="fa-solid fa-user"></i><span class="text">Login</span></a>
+    <a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span></a>
 
-  <div class="content">
-    <header>
-      <h1><i class="fa-solid fa-tv"></i> Platforms</h1>
-      <p>Choose where to export and share your videos</p>
-    </header>
 
-    <section>
-      <div class="card-grid">
-        <div class="card">
-          <h3><i class="fa-brands fa-youtube"></i> YouTube</h3>
-          <p>Export in 4K/1080p formats, add thumbnails, and auto-tag.</p>
-          <button class="export-btn" data-platform="YouTube">Export</button>
+  <h2>Navigation</h2>
+  <a href="vedio_editing.html"><i class="fa-solid fa-house"></i><span class="text">Home</span></a>
+  <a href="transitions.html"><i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span></a>
+  <a href="music.html"><i class="fa-solid fa-music"></i><span class="text">Trending Music</span></a>
+  <a href="styles.html"><i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span></a>
+  <a href="platforms.html" class="active"><i class="fa-solid fa-tv"></i><span class="text">Platforms</span></a>
+  <a href="apps.html"><i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span></a>
+
+  <h2>Quick Tools</h2>
+  <a href="{{ url_for('converter_page') }}"><i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span></a>
+  <a href="{{ url_for('trimmer_page') }}"><i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span></a>
+  <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
+    <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
+  </a>
+</nav>
+
+<!-- Main -->
+<div class="content">
+  <header>
+    <h1><i class="fa-solid fa-tv"></i> Platform Cheat Sheets</h1>
+    <p>Learn the right settings. Nail your uploads.</p>
+  </header>
+
+  <section class="card-grid">
+    <!-- CARD 1 - YouTube -->
+    <div class="card">
+      <h3><i class="fa-brands fa-youtube"></i> YouTube</h3>
+      <div class="card-content">
+        <div class="card-section">
+          <h4>🎞️ Export</h4>
+          <ul>
+            <li><i class="fa-solid fa-desktop"></i> 1920x1080</li>
+            <li><i class="fa-solid fa-film"></i> 24–60fps</li>
+            <li><i class="fa-solid fa-wrench"></i> H.264</li>
+          </ul>
         </div>
-        <div class="card">
-          <h3><i class="fa-brands fa-instagram"></i> Instagram</h3>
-          <p>Create Reels, Stories, or Posts with vertical format support.</p>
-          <button class="export-btn" data-platform="Instagram">Export</button>
+        <div class="card-section">
+          <h4>📂 Upload</h4>
+          <ul>
+            <li><i class="fa-solid fa-floppy-disk"></i> 256 GB</li>
+            <li><i class="fa-solid fa-hourglass-half"></i> 12h max</li>
+          </ul>
         </div>
-        <div class="card">
-          <h3><i class="fa-brands fa-tiktok"></i> TikTok</h3>
-          <p>Perfect for short edits, sounds, and trends.</p>
-          <button class="export-btn" data-platform="TikTok">Export</button>
+        <div class="card-section">
+          <h4>💡 Tips</h4>
+          <ul>
+            <li><i class="fa-solid fa-lightbulb"></i> SEO titles</li>
+            <li><i class="fa-solid fa-lightbulb"></i> End screens</li>
+          </ul>
         </div>
       </div>
-    </section>
-  </div>
-
-  <!-- Upload Modal -->
-  <div id="uploadModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Export Video</h2>
-      <label>Select Platform:</label>
-      <select id="platformSelect">
-        <option value="youtube">YouTube</option>
-        <option value="instagram">Instagram</option>
-        <option value="tiktok">TikTok</option>
-      </select>
-
-      <div id="youtubeFields">
-        <input type="text" id="videoTitle" placeholder="Video Title">
-        <textarea id="videoDesc" placeholder="Video Description"></textarea>
-      </div>
-
-      <input type="file" id="videoFile" accept="video/*">
-      <div id="exportNote"></div>
-
-      <button id="uploadBtn">Upload</button>
-      <button onclick="closeModal()">Cancel</button>
     </div>
-  </div>
 
-  <script>
-    const modal = document.getElementById("uploadModal");
-    const platformSelect = document.getElementById("platformSelect");
-    const youtubeFields = document.getElementById("youtubeFields");
-    const note = document.getElementById("exportNote");
+    
+    <!-- Instagram -->
+    <div class="card">
+      <h3><i class="fa-brands fa-instagram"></i> Instagram Reels</h3>
+      <div class="card-content">
+        <div class="card-section">
+          <h4>🎞️ Export Settings</h4>
+          <ul>
+            <li><i class="fa-solid fa-desktop"></i> 1080x1920 (9:16)</li>
+            <li><i class="fa-solid fa-film"></i> 30–60fps</li>
+            <li><i class="fa-solid fa-wrench"></i> H.264 Codec</li>
+            <li><i class="fa-solid fa-signal"></i> 5 Mbps</li>
+          </ul>
+        </div>
+        <div class="card-section">
+          <h4>📂 Upload</h4>
+          <ul>
+            <li><i class="fa-solid fa-floppy-disk"></i> Max 4 GB</li>
+            <li><i class="fa-solid fa-hourglass-half"></i> 90 sec max</li>
+          </ul>
+        </div>
+        <div class="card-section">
+          <h4>💡 Tips</h4>
+          <ul>
+            <li><i class="fa-solid fa-lightbulb"></i> Hook in 3 sec</li>
+            <li><i class="fa-solid fa-lightbulb"></i> Trending audios</li>
+            <li><i class="fa-solid fa-lightbulb"></i> Bright visuals</li>
+            <li><i class="fa-solid fa-lightbulb"></i> Post often</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TikTok -->
+    <div class="card">
+      <h3><i class="fa-brands fa-tiktok"></i> TikTok</h3>
+      <div class="card-content">
+        <div class="card-section">
+          <h4>🎞️ Export Settings</h4>
+          <ul>
+            <li><i class="fa-solid fa-desktop"></i> 1080x1920 (9:16)</li>
+            <li><i class="fa-solid fa-film"></i> 30–60fps</li>
+            <li><i class="fa-solid fa-wrench"></i> H.264 Codec</li>
+            <li><i class="fa-solid fa-signal"></i> 6 Mbps</li>
+          </ul>
+        </div>
+        <div class="card-section">
+          <h4>📂 Upload</h4>
+          <ul>
+            <li><i class="fa-solid fa-floppy-disk"></i> 287MB–2GB</li>
+            <li><i class="fa-solid fa-hourglass-half"></i> 10 mins max</li>
+          </ul>
+        </div>
+        <div class="card-section">
+          <h4>💡 Tips</h4>
+          <ul>
+            <li><i class="fa-solid fa-lightbulb"></i> Trending sounds</li>
+            <li><i class="fa-solid fa-lightbulb"></i> Post evenings</li>
+            <li><i class="fa-solid fa-lightbulb"></i> Short videos best</li>
+            <li><i class="fa-solid fa-lightbulb"></i> Engage comments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+
+  </section>
+
+  <!-- Tools Section -->
+  <section class="tools">
+    <h2>🛠 Platform Calculator</h2>
+    <select id="platformSelect">
+      <option value="">Select a platform</option>
+      <option value="youtube">YouTube</option>
+      <option value="instagram">Instagram Reels</option>
+      <option value="tiktok">TikTok</option>
+    </select>
+    <button onclick="showSettings()">Show Settings</button>
+
+    <div id="output" class="output-box"></div>
+
+    <h2 style="margin-top:40px;">📋 Export Settings Checklist</h2>
+    <button onclick="toggleChecklist()">Open Checklist</button>
+
+    <div id="checklist" class="checklist">
+      <label><input type="checkbox"> Correct Resolution</label>
+      <label><input type="checkbox"> Correct FPS</label>
+      <label><input type="checkbox"> Using H.264 Codec</label>
+      <label><input type="checkbox"> Optimal Bitrate</label>
+      <label><input type="checkbox"> Under File Size Limit</label>
+    </div>
+  </section>
+
   
-    document.querySelectorAll(".export-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        modal.classList.remove("hidden");
-        const selectedPlatform = btn.getAttribute("data-platform").toLowerCase();
-        platformSelect.value = selectedPlatform;
-        updatePlatformUI();
-      });
-    });
-  
-    platformSelect.addEventListener("change", updatePlatformUI);
-  
-    function updatePlatformUI() {
-      if (platformSelect.value === "youtube") {
-        youtubeFields.style.display = "block";
-        note.innerHTML = "";
-      } else {
-        youtubeFields.style.display = "none";
-        note.innerHTML = "<small style='color:orange'>Download will start. Then upload manually to Instagram/TikTok.</small>";
-      }
+</div>
+
+<script>
+  function showSettings() {
+    const platform = document.getElementById('platformSelect').value;
+    let settings = '';
+    if (platform === 'youtube') {
+      settings = "Resolution: 1920x1080\nFPS: 24–60\nCodec: H.264\nBitrate: 8Mbps";
+    } else if (platform === 'instagram') {
+      settings = "Resolution: 1080x1920\nFPS: 30–60\nCodec: H.264\nBitrate: 5Mbps";
+    } else if (platform === 'tiktok') {
+      settings = "Resolution: 1080x1920\nFPS: 30–60\nCodec: H.264\nBitrate: 6Mbps";
     }
-  
-    function closeModal() {
-      modal.classList.add("hidden");
-    }
-  
-    document.getElementById("uploadBtn").addEventListener("click", () => {
-      const platform = platformSelect.value;
-      const fileInput = document.getElementById("videoFile");
-      const file = fileInput.files[0];
-      if (!file) return alert("Choose a file to export!");
-  
-      // Create form and append it to body
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.enctype = "multipart/form-data";
-      form.action = "/upload_video";
-      form.style.display = "none";
-  
-      const platformInput = document.createElement("input");
-      platformInput.type = "hidden";
-      platformInput.name = "platform";
-      platformInput.value = platform;
-      form.appendChild(platformInput);
-  
-      if (platform === "youtube") {
-        const titleInput = document.createElement("input");
-        titleInput.type = "hidden";
-        titleInput.name = "title";
-        titleInput.value = document.getElementById("videoTitle").value;
-        form.appendChild(titleInput);
-  
-        const descInput = document.createElement("input");
-        descInput.type = "hidden";
-        descInput.name = "description";
-        descInput.value = document.getElementById("videoDesc").value;
-        form.appendChild(descInput);
-      }
-  
-      // File input (actual file input must be part of form)
-      const newFileInput = fileInput.cloneNode();
-      newFileInput.files = fileInput.files;
-      newFileInput.name = "file";
-      form.appendChild(newFileInput);
-  
-      document.body.appendChild(form);
-      form.submit();
-    });
-  </script>
-  
-  
-  
-  
+    document.getElementById('output').innerText = settings;
+  }
+
+  function toggleChecklist() {
+    const checklist = document.getElementById('checklist');
+    checklist.style.display = checklist.style.display === 'block' ? 'none' : 'block';
+  }
+</script>
+
 </body>
 </html>

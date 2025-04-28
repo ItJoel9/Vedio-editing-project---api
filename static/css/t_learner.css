@@ -299,3 +299,62 @@ iframe {
     to { opacity: 1; transform: translateY(0); }
   }
 
+/* --- Stylish Buttons Fix --- */
+.editor-btn, .back-link {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff8500, #e67e00);
+  color: #111;
+  padding: 12px 24px;
+  margin: 20px 10px 10px 0;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 133, 0, 0.5);
+}
+
+.editor-btn:hover, .back-link:hover {
+  background: linear-gradient(135deg, #e67e00, #cc6f00);
+  color: #fff;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 133, 0, 0.7);
+}
+/* EXP Popup Styling */
+.exp-popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: linear-gradient(135deg, #ff8500, #e67e00);
+  color: #111;
+  font-weight: 800;
+  padding: 20px 30px;
+  border-radius: 12px;
+  font-size: 2rem;
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.5s ease;
+  box-shadow: 0 0 20px rgba(255, 133, 0, 0.8);
+}
+
+/* When popup shows */
+.exp-popup.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.2);
+  animation: bounce 1s ease forwards;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -55%) scale(1.4); }
+  70% { transform: translate(-50%, -45%) scale(1.2); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes confetti {
+  0% { transform: rotate(0deg) translateY(0); opacity: 1; }
+  100% { transform: rotate(360deg) translateY(200px); opacity: 0; }
+}

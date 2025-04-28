@@ -6,18 +6,41 @@
   <title>Transition Tutorial</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/learner.css') }}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
- 
+  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <style>
+    /* --- Stylish Buttons Fix --- */
+    .editor-btn, .back-link {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff8500, #e67e00);
+      color: #111;
+      padding: 12px 24px;
+      margin: 20px 10px 10px 0;
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 133, 0, 0.5);
+    }
+
+    .editor-btn:hover, .back-link:hover {
+      background: linear-gradient(135deg, #e67e00, #cc6f00);
+      color: #fff;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(255, 133, 0, 0.7);
+    }
+  </style>
 </head>
 <body>
 
   <video autoplay muted loop playsinline id="bg-video">
     <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
   </video>
-  
+
   <!-- Sidebar Nav -->
   <nav id="sidebar">
-    
-    
     <h2>Account</h2>
     <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
       <i class="fa-solid fa-user"></i><span class="text">Login</span>
@@ -53,7 +76,6 @@
     <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
       <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
     </a>
-    
     <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
       <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
     </a>
@@ -89,26 +111,25 @@
     const userId = "{{ user_id }}";
     let expGiven = false;
     let player;
-  
-    // Unique key per user to avoid shared progress
+
     const localKey = `completed_tuts_${userId}`;
     const completed = JSON.parse(localStorage.getItem(localKey) || "[]");
     const alreadyCompleted = completed.includes(videoId);
-  
+
     function markCompletedUI() {
       const status = document.getElementById("statusArea");
       const exp = document.getElementById("earnedExp");
-  
+
       status.textContent = "✅ Already Completed";
       exp.textContent = "+30 EXP Earned!";
       document.dispatchEvent(new CustomEvent("expUpdated", { detail: { newExp: 30 } }));
     }
-  
+
     if (alreadyCompleted) markCompletedUI();
-  
+
     function onYouTubeIframeAPIReady() {
       if (!videoId) return;
-  
+
       player = new YT.Player("ytPlayer", {
         height: "500",
         width: "100%",
@@ -118,21 +139,19 @@
         }
       });
     }
-  
+
     function onPlayerStateChange(event) {
       const completed = JSON.parse(localStorage.getItem(localKey) || "[]");
       const alreadyCompleted = completed.includes(videoId);
-  
+
       if (event.data === YT.PlayerState.ENDED && !expGiven && !alreadyCompleted) {
         expGiven = true;
-  
-        // If user is a guest, block EXP gain
+
         if (userId === "guest") {
           document.getElementById("statusArea").textContent = "⚠️ Login to earn EXP.";
           return;
         }
-  
-        // Otherwise give EXP and store progress
+
         fetch("/update_exp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -143,7 +162,7 @@
             completed.push(videoId);
             localStorage.setItem(localKey, JSON.stringify(completed));
             markCompletedUI();
-  
+
             const popup = document.getElementById("expPopup");
             popup.classList.add("show");
             setTimeout(() => popup.classList.remove("show"), 3000);
@@ -153,20 +172,17 @@
           });
       }
     }
-  
-    // Load YouTube API
+
     const tag = document.createElement("script");
     tag.src = "https://www.youtube.com/iframe_api";
     document.head.appendChild(tag);
-  
-    // Edge case: if API already loaded
+
     setTimeout(() => {
       if (typeof YT !== "undefined" && YT.loaded && typeof YT.Player === "function") {
         onYouTubeIframeAPIReady();
       }
     }, 1500);
   </script>
-  
-  
+
 </body>
 </html>
