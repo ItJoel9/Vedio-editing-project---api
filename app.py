@@ -33,6 +33,7 @@ from pydub import AudioSegment
 from collections import defaultdict
 from datetime import datetime
 import os, uuid, time, json, tempfile
+from flask import Blueprint
 
 # === ENABLE LOCAL OAUTH === #
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -69,6 +70,8 @@ os.makedirs(app.config["TEMP_SESSION"], exist_ok=True)
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 REDIRECT_URI = "http://localhost:5000/oauth2callback"
 
+
+recommend_bp = Blueprint('recommend', __name__)
 # === EXPORT TO YOUTUBE === #
 
 
@@ -515,10 +518,6 @@ def is_valid_spotify_id(track_id):
     return isinstance(track_id, str) and len(track_id) == 22
 
 def fetch_and_store_track_features(track_id):
-    if not is_valid_spotify_id(track_id):
-        print(f"❌ Invalid Spotify ID: {track_id}")
-        return
-
     if mongo.db.spotify_tracks.find_one({"track_id": track_id}):
         return
 
@@ -531,21 +530,20 @@ def fetch_and_store_track_features(track_id):
             "name": track["name"],
             "artist": track["artists"][0]["name"],
             "album": track["album"]["name"],
-            "features": audio,
+            "preview_url": track.get("preview_url"),
+            "cover_url": track["album"]["images"][0]["url"] if track["album"]["images"] else "",
+            "features": {
+                "danceability": audio.get("danceability"),
+                "energy": audio.get("energy"),
+                "acousticness": audio.get("acousticness"),
+                "instrumentalness": audio.get("instrumentalness"),
+                "valence": audio.get("valence"),
+                "tempo": audio.get("tempo")
+            },
             "timestamp": datetime.now(timezone.utc)
         })
-
-        print(f"✅ Stored features for {track['name']}")
-
-    except SpotifyException as e:
-        if e.http_status == 429:
-            retry_after = int(e.headers.get("Retry-After", 5))
-            print(f"⚠️ Rate limit hit. Sleeping for {retry_after} seconds...")
-            time.sleep(retry_after)
-            return fetch_and_store_track_features(track_id)
-        print(f"❌ SpotifyException: {e}")
     except Exception as e:
-        print(f"❌ Error fetching features for {track_id}: {e}")
+        print(f"❌ Error fetching Spotify track {track_id}:", e)
 
 
 @app.route("/vote_track", methods=["POST"])
@@ -573,27 +571,6 @@ def vote_track():
 
     return jsonify({"status": "ok"})
 
-
-def fetch_and_store_track_features(track_id):
-    existing = mongo.db.spotify_tracks.find_one({"track_id": track_id})
-    if existing:
-        return  # already stored
-
-    try:
-        track = sp.track(track_id)
-        audio = sp.audio_features(track_id)[0]
-
-        mongo.db.spotify_tracks.insert_one({
-            "track_id": track_id,
-            "name": track["name"],
-            "artist": track["artists"][0]["name"],
-            "album": track["album"]["name"],
-            "features": audio,
-            "timestamp": datetime.now(timezone.utc)
-        })
-
-    except Exception as e:
-        print(f"❌ Error fetching features for {track_id}: {e}")
 
 
 from sklearn.metrics.pairwise import cosine_similarity
@@ -627,6 +604,83 @@ def upload_profile_pic():
     except Exception as e:
         print("Upload error:", e)
         return jsonify({"status": "fail", "msg": "Upload failed."}), 500
+    
+
+@app.route("/api/user_id")
+def get_user_id():
+    return jsonify({"user_id": session.get("user_id")})
+
+@app.route("/recommend_test")
+def recommend_test_page():
+    return render_template("recommend_test.html")
+
+@app.route("/api/spotify_recommendations")
+def spotify_recommendations():
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Not logged in"}), 401
+
+    liked_votes = list(mongo.db.track_votes.find({"user_id": user_id, "vote": "like"}))
+    liked_track_ids = [vote["track_id"] for vote in liked_votes if isinstance(vote.get("track_id"), str) and len(vote["track_id"]) == 22]
+
+    if not liked_track_ids:
+        return jsonify({"error": "No liked tracks found"}), 400
+
+    liked_tracks = list(mongo.db.spotify_tracks.find({"track_id": {"$in": liked_track_ids}}))
+
+    liked_albums = {track.get("album", "") for track in liked_tracks}
+    liked_artists = {track.get("artist", "") for track in liked_tracks}
+
+    recommendations = list(mongo.db.spotify_tracks.find({
+        "$or": [
+            {"album": {"$in": list(liked_albums)}},
+            {"artist": {"$in": list(liked_artists)}}
+        ],
+        "track_id": {"$nin": liked_track_ids}
+    }).limit(20))
+
+    if not recommendations:
+        return jsonify({"error": "No similar tracks found"}), 404
+
+    results = []
+    for track in recommendations:
+        results.append({
+            "track_id": track.get("track_id", ""),  # ✅ added this
+            "title": track.get("name", "Unknown"),
+            "artist": track.get("artist", ""),
+        })
+
+    return jsonify(results)
+
+
+
+@app.route("/fix_missing_features")
+def fix_missing_features():
+    user_id = session.get("user_id")
+    if not user_id:
+        return "Login required"
+
+    liked_votes = list(mongo.db.track_votes.find({"user_id": user_id, "vote": "like"}))
+    liked_track_ids = [vote["track_id"] for vote in liked_votes]
+
+    fixed = 0
+    for tid in liked_track_ids:
+        track = mongo.db.spotify_tracks.find_one({"track_id": tid})
+        if not track:
+            continue
+        if "features" not in track or not track["features"]:
+            try:
+                audio = sp.audio_features(tid)[0]
+                mongo.db.spotify_tracks.update_one(
+                    {"track_id": tid},
+                    {"$set": {"features": audio}}
+                )
+                fixed += 1
+            except:
+                print("❌ Couldn't fix features for:", tid)
+
+    return f"<h2>✅ Fixed features for {fixed} liked tracks</h2>"
+
 
 @app.route("/recommendations/<user_id>")
 def recommend_tracks(user_id):
@@ -647,10 +701,12 @@ def recommend_tracks(user_id):
             vec = [feats[k] for k in feature_keys]
             X.append(vec)
             track_meta.append({
-                "track_id": track["track_id"],
-                "name": track["name"],
-                "artist": track["artist"],
-                "album": track.get("album", "")
+                "track_id": track.get("track_id"),
+                "name": track.get("name", "Unknown"),
+                "artist": track.get("artist", ""),
+                "album": track.get("album", ""),
+                "preview_url": track.get("preview_url", ""),  # ✅ NEW
+                "cover_url": track.get("cover_url", "")       # ✅ NEW
             })
             if track["track_id"] in liked_ids:
                 liked_vecs.append(vec)
@@ -775,6 +831,39 @@ def upgrade_spotify_features():
 def track_count():
     total = mongo.db.spotify_tracks.count_documents({})
     return f"<h2>Total Tracks in DB: {total}</h2>"
+
+# === AUTO BUILD SPOTIFY TRACKS IF EMPTY ===
+with app.app_context():
+    track_count = mongo.db.spotify_tracks.count_documents({})
+    if track_count == 0:
+        print("⚡ No spotify_tracks found. Auto-building metadata...")
+        playlists = ["5mu8Az12kwWkPZKAxAUjnK"]  # you can add more playlists here
+
+        for pid in playlists:
+            try:
+                results = sp.playlist_tracks(pid)
+                for item in results["items"]:
+                    track = item.get("track")
+                    if track and track.get("id"):
+                        track_id = track["id"]
+                        mongo.db.spotify_tracks.update_one(
+                            {"track_id": track_id},
+                            {
+                                "$set": {
+                                    "track_id": track_id,
+                                    "name": track.get("name", "Unknown"),
+                                    "artist": track["artists"][0].get("name", "Unknown"),
+                                    "album": track.get("album", {}).get("name", "Unknown"),
+                                    "features": {}
+                                }
+                            },
+                            upsert=True
+                        )
+                print(f"✅ Auto-imported songs from playlist {pid}")
+            except Exception as e:
+                print(f"❌ Error auto-fetching playlist {pid}:", e)
+    else:
+        print(f"✅ {track_count} tracks already loaded. Skipping auto-build.")
 
 
 # === RUN === #
