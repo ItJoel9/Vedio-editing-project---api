@@ -264,3 +264,28 @@ nav:hover ~ .main {
   color: #ff8500;
   cursor: pointer;
 }
+/* --- EXP Popup (when tutorial is completed) --- */
+.exp-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: linear-gradient(135deg, #09ff00, #00e600);
+  color: #111;
+  padding: 20px 40px;
+  border-radius: 20px;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+  transition: all 0.5s ease;
+}
+
+.exp-popup.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}

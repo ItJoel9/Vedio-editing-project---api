@@ -36,7 +36,8 @@
 
   <section class="user-management">
     <h2>Manage Users</h2>
-    <table>
+    <input type="text" id="searchInput" onkeyup="searchUsers()" placeholder="Search by name or email..." style="margin-bottom:10px; padding:5px; width:250px;">
+    <table id="userTable">
       <thead>
         <tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr>
       </thead>
@@ -45,7 +46,13 @@
         <tr>
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
-          <td>{{ user.role or 'user' }}</td>
+          <td>
+            <select onchange="updateRole('{{ user.email }}', this.value)">
+              <option value="user" {% if user.role == 'user' %}selected{% endif %}>user</option>
+              <option value="creator" {% if user.role == 'creator' %}selected{% endif %}>creator</option>
+              <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>admin</option>
+            </select>
+          </td>
           <td>
             <button>Edit</button>
             <button onclick="deleteUser('{{ user.email }}')">Delete</button>
@@ -68,6 +75,21 @@
       {% endfor %}
     </ul>
   </section>
+
+  <section class="tool-usage">
+    <h2>🛠️ Tool Usage Logs</h2>
+    {% for tool, users in tools.items() %}
+      <div class="stat-card">
+        <h3>{{ tool }}</h3>
+        <ul>
+          {% for email in users %}
+            <li>{{ email }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </section>
+
 </div>
 
 <script>
@@ -91,6 +113,27 @@
     const msg = await res.text();
     alert(msg);
     location.reload();
+  }
+
+  async function updateRole(email, newRole) {
+    const res = await fetch("/admin/update_role", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, newRole })
+    });
+    const msg = await res.text();
+    alert(msg);
+    location.reload();
+  }
+
+  function searchUsers() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#userTable tbody tr");
+    rows.forEach(row => {
+      const name = row.cells[0].innerText.toLowerCase();
+      const email = row.cells[1].innerText.toLowerCase();
+      row.style.display = name.includes(input) || email.includes(input) ? "" : "none";
+    });
   }
 </script>
 

@@ -5,29 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Platform Cheat Sheets</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/plat_style.css') }}">
 </head>
 
 <body>
 
 <!-- Sidebar -->
-<nav>
-    <h2>Account</h2>
-    <a href="{{ url_for('login_page') }}"><i class="fa-solid fa-user"></i><span class="text">Login</span></a>
-    <a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span></a>
-
+<nav id="sidebar">
+  <h2>Account</h2>
+  <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
+    <i class="fa-solid fa-user"></i><span class="text">Login</span>
+  </a>
+  <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
+    <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
+  </a>
 
   <h2>Navigation</h2>
-  <a href="vedio_editing.html"><i class="fa-solid fa-house"></i><span class="text">Home</span></a>
-  <a href="transitions.html"><i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span></a>
-  <a href="music.html"><i class="fa-solid fa-music"></i><span class="text">Trending Music</span></a>
-  <a href="styles.html"><i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span></a>
-  <a href="platforms.html" class="active"><i class="fa-solid fa-tv"></i><span class="text">Platforms</span></a>
-  <a href="apps.html"><i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span></a>
+  <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">
+    <i class="fa-solid fa-house"></i><span class="text">Home</span>
+  </a>
+  <a href="{{ url_for('transitions_page') }}" class="{% if request.endpoint == 'transitions_page' %}active{% endif %}">
+    <i class="fa-solid fa-clapperboard"></i><span class="text">Transitions</span>
+  </a>
+  <a href="{{ url_for('music_page') }}" class="{% if request.endpoint == 'music_page' %}active{% endif %}">
+    <i class="fa-solid fa-music"></i><span class="text">Trending Music</span>
+  </a>
+  <a href="{{ url_for('styles_page') }}" class="{% if request.endpoint == 'styles_page' %}active{% endif %}">
+    <i class="fa-solid fa-palette"></i><span class="text">Edit Styles</span>
+  </a>
+  <a href="{{ url_for('platforms_page') }}" class="{% if request.endpoint == 'platforms_page' %}active{% endif %}">
+    <i class="fa-solid fa-tv"></i><span class="text">Platforms</span>
+  </a>
+  <a href="{{ url_for('apps_page') }}" class="{% if request.endpoint == 'apps_page' %}active{% endif %}">
+    <i class="fa-solid fa-mobile-screen-button"></i><span class="text">Apps</span>
+  </a>
 
   <h2>Quick Tools</h2>
-  <a href="{{ url_for('converter_page') }}"><i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span></a>
-  <a href="{{ url_for('trimmer_page') }}"><i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span></a>
+  <a href="{{ url_for('converter_page') }}" class="{% if request.endpoint == 'converter_page' %}active{% endif %}">
+    <i class="fa-solid fa-arrows-spin"></i><span class="text">Video Converter</span>
+  </a>
+  <a href="{{ url_for('trimmer_page') }}" class="{% if request.endpoint == 'trimmer_page' %}active{% endif %}">
+    <i class="fa-solid fa-scissors"></i><span class="text">Audio Trimmer</span>
+  </a>
   <a href="https://motionarray.com/browse/stock-video/free/" target="_blank">
     <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
   </a>

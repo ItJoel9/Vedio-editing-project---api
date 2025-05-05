@@ -466,10 +466,22 @@ def admin_panel():
         "user_count": mongo.db.users.count_documents({}),
         "tool_uses": mongo.db.tool_logs.count_documents({}),
         "challenge_count": mongo.db.challenges.count_documents({}),
-        "visits": 1200  # placeholder for now
+        "visits": 1200  # placeholder
     }
 
-    return render_template("admin.html", users=users, challenges=challenges, **stats)
+    # 🧠 TOOL USAGE LOGS
+    from collections import defaultdict
+    tool_usage = mongo.db.tool_logs.find()
+    tool_map = defaultdict(list)
+
+    for log in tool_usage:
+        if log.get("user_email") and log.get("tool"):
+            tool_map[log["tool"]].append(log["user_email"])
+
+    # Remove duplicate users per tool
+    tool_map = {tool: list(set(emails)) for tool, emails in tool_map.items()}
+
+    return render_template("admin.html", users=users, challenges=challenges, tools=tool_map, **stats)
 
 
 @app.route("/admin/delete_user", methods=["DELETE"])

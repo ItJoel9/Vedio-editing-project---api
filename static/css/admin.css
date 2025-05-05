@@ -130,3 +130,106 @@ button:hover {
 .challenges li {
   margin: 10px 0;
 }
+
+
+----------------
+
+
+
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 10px #00000033;
+}
+
+.stat-card h3 {
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.stat-card p {
+  font-size: 1.5rem;
+  color: #ff8500;
+  font-weight: bold;
+}
+
+.user-management table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.user-management th,
+.user-management td {
+  padding: 12px;
+  border: 1px solid #333;
+  text-align: left;
+}
+
+.user-management th {
+  background: #1e1e1e;
+  color: #ff8500;
+  text-transform: uppercase;
+}
+
+.user-management td button,
+.challenges button {
+  padding: 6px 12px;
+  background: #ff8500;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.user-management td button:hover,
+.challenges button:hover {
+  background: #ffaa33;
+}
+
+.user-management select {
+  padding: 6px;
+  background: #111;
+  color: #ff8500;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+
+.user-management input[type="text"] {
+  padding: 10px;
+  background: #111;
+  color: #ff8500;
+  border: 1px solid #333;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.challenges ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.challenges li {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 6px #00000055;
+}
+
+.challenges strong {
+  color: #ff8500;
+}

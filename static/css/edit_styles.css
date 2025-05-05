@@ -1,4 +1,3 @@
-/* Imports */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 body {
@@ -8,6 +7,7 @@ body {
   color: #ffffff;
   display: flex;
 }
+
 #bg-video {
   position: fixed;
   top: 0;
@@ -16,10 +16,11 @@ body {
   height: 100vh;
   object-fit: cover;
   z-index: -2;
-  opacity: 0.25; /* adjust for subtlety */
+  opacity: 0.25;
   pointer-events: none;
 }
-/* Nav Bar */
+
+/* --- Sidebar Navigation --- */
 nav {
   width: 60px;
   background: #1a1a1a;
@@ -32,15 +33,16 @@ nav {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
   transition: width 0.3s ease;
   overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
+
 nav::-webkit-scrollbar {
   display: none;
 }
+
 nav:hover {
   width: 250px;
 }
+
 nav h2 {
   color: #ffffff;
   text-align: center;
@@ -49,9 +51,11 @@ nav h2 {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 nav:hover h2 {
   opacity: 1;
 }
+
 nav a {
   display: flex;
   align-items: center;
@@ -63,174 +67,458 @@ nav a {
   font-weight: 600;
   transition: background 0.3s, color 0.3s, transform 0.3s;
 }
+
 nav a:hover {
   background: linear-gradient(120deg, #ff8500, #e67e00);
   color: #ffffff;
   transform: scale(1.05);
 }
+
 nav a span {
   font-size: 1.5rem;
   margin-right: 10px;
 }
+
 nav a span.text {
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 nav:hover a span.text {
   display: inline-block;
   opacity: 1;
 }
 
-/* Main Area */
+nav a.active {
+  background: #ff8500;
+  color: #fff;
+}
+nav a.active i, nav a.active .text {
+  color: #fff;
+}
+
+/* --- Main Content Area --- */
 .content {
   margin-left: 80px;
   padding: 40px 20px;
   transition: margin-left 0.3s ease;
 }
+
 nav:hover ~ .content {
   margin-left: 270px;
 }
+
 header {
   text-align: center;
   margin-bottom: 30px;
 }
+
 header h1 {
   color: #ff8500;
   font-size: 2.5rem;
 }
+
 header p {
   font-size: 1.1rem;
   color: #ccc;
 }
 
-/* Filters */
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  justify-content: space-between;
-}
-.filters input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  background: #222;
-  color: white;
-}
-.tags {
-  display: flex;
-  gap: 10px;
-}
-.tags button {
-  background: transparent;
-  border: 1px solid #ff8500;
-  color: #ff8500;
-  padding: 5px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-.tags button:hover {
-  background: #ff8500;
-  color: #111;
-}
-
-/* Cards */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin: 30px 0;
-}
-.card {
-  background: #2a2a2a;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  transition: transform 0.3s;
-}
-.card:hover {
-  transform: scale(1.05);
-}
-.card h3 {
-  color: #ff8500;
-}
-.card button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  border: none;
-  color: white;
-  font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.card button:hover {
-  transform: scale(1.05);
-}
-
-/* Preview + Controls */
+/* --- Preview and Editor Panel --- */
 .preview-editor {
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
   margin-top: 40px;
 }
+
 .preview {
   flex: 1;
 }
-.preview video {
+
+.preview img, .preview canvas {
   width: 100%;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
+
+#uploadInput {
+  margin: 20px 0;
+  background: #222;
+  border: 1px solid #ff8500;
+  color: #ff8500;
+  padding: 10px;
+  border-radius: 8px;
+  display: block;
+}
+
+#uploadInput:hover {
+  background: #ff8500;
+  color: #111;
+  cursor: pointer;
+}
+
+.preview button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: linear-gradient(120deg, #ff8500, #e67e00);
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.preview button:hover {
+  transform: scale(1.05);
+}
+
+/* --- Editor Panel (Right Side) --- */
 .editor-panel {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .editor-panel label {
   margin-top: 10px;
   color: #bbb;
-}
-.editor-panel input[type=range] {
-  width: 100%;
+  display: block;
 }
 
-/* Featured */
-.featured {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-top: 60px;
+.editor-panel input[type=range] {
+  width: 100%;
+  margin-bottom: 10px;
 }
-.highlight {
-  flex: 1;
+
+/* --- Presets Section --- */
+.preset-buttons {
+  margin-top: 20px;
+}
+
+.preset-buttons h4 {
+  color: #ff8500;
+  margin-bottom: 10px;
+}
+
+.preset-buttons button {
   background: #222;
+  color: #ff8500;
+  border: 1px solid #ff8500;
+  padding: 8px 16px;
+  margin: 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.preset-buttons button:hover {
+  background: #ff8500;
+  color: #111;
+}
+
+/* --- Cheat Sheet --- */
+.cheat-sheet {
+  background: #1a1a1a;
   padding: 20px;
   border-radius: 10px;
-}
-.highlight h2 {
+  margin-top: 40px;
   color: #ff8500;
 }
-.highlight button {
-  margin-top: 10px;
-  padding: 10px 20px;
+
+.cheat-sheet h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.cheat-sheet ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.cheat-sheet li {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+.cheat-sheet li strong {
+  color: #ff8500;
+}
+
+/* --- Tooltips --- */
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  display: inline-block;
+  margin-left: 5px;
   background: #ff8500;
-  border: none;
-  border-radius: 6px;
   color: #111;
-  font-weight: 600;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 18px;
   cursor: pointer;
 }
-nav a.active {
+
+.tooltiptext {
+  visibility: hidden;
+  width: 180px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 999;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+
+.tooltip-wrapper:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+/* --- Download Success Popup --- */
+#downloadPopup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
   background: #ff8500;
-  color: #fff;
+  color: #111;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-30px);
+  transition: all 0.5s ease;
+  z-index: 10000;
 }
-nav a.active i,
-nav a.active .text {
-  color: #fff;
+
+#downloadPopup.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
+
+.slider-group {
+  margin-bottom: 15px;
+}
+.slider-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.slider-control input[type=range] {
+  flex: 1;
+}
+.slider-control span {
+  width: 50px;
+  text-align: right;
+  font-size: 14px;
+  color: #ff8500;
+}
+.editor-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  margin-top: 40px;
+}
+
+.main-preview {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preset-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.preset-strip button {
+  background: #222;
+  color: #ff8500;
+  border: 1px solid #ff8500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.preset-strip button:hover {
+  background: #ff8500;
+  color: #111;
+}
+
+.side-controls {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+}
+/* File Upload Input */
+#uploadInput {
+  background-color: #000;
+  color: #ff8500;
+  border: 2px solid #ff8500;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+#uploadInput::-webkit-file-upload-button {
+  background: #000;
+  color: #ff8500;
+  border: 1px solid #ff8500;
+  padding: 8px 12px;
+  font-weight: bold;
+  border-radius: 6px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#uploadInput::-webkit-file-upload-button:hover {
+  background: #ff8500;
+  color: #000;
+}
+
+/* Download Button Style */
+.preview button {
+  background: #000;
+  color: #ff8500;
+  border: 2px solid #ff8500;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.preview button:hover {
+  background: #ff8500;
+  color: #000;
+  transform: scale(1.05);
+}
+.preview button {
+  background-color: #000;
+  color: #ff8500;
+  border: 2px solid #ff8500;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.preview button:hover {
+  background-color: #ff8500;
+  color: #000;
+  transform: scale(1.05);
+}
+/* Horizontal layout for upload + download */
+.file-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Upload style */
+#uploadInput {
+  background-color: #000;
+  color: #ff8500;
+  border: 2px solid #ff8500;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+}
+
+#uploadInput::-webkit-file-upload-button {
+  background: #000;
+  color: #ff8500;
+  border: 1px solid #ff8500;
+  padding: 8px 12px;
+  font-weight: bold;
+  border-radius: 6px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#uploadInput::-webkit-file-upload-button:hover {
+  background: #ff8500;
+  color: #000;
+}
+
+/* Download style */
+#downloadBtn {
+  background: #000;
+  color: #ff8500;
+  border: 2px solid #ff8500;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#downloadBtn:hover {
+  background: #ff8500;
+  color: #000;
+  transform: scale(1.05);
+}
+canvas {
+  width: auto;
+  height: auto;
+  max-height: 80vh;
+  max-width: 100%;
+  display: block;
+  border-radius: 12px;
+  object-fit: contain;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+ canvas {
+  width: auto;
+  height: auto;
+  max-height: 80vh;
+  max-width: 100%;
+  display: block;
+  border-radius: 12px;
+  object-fit: contain;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
