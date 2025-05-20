@@ -1,4 +1,4 @@
-# Vdio - Creative Video Editing Platform
+![image](https://github.com/user-attachments/assets/6308d502-7484-4a31-a743-4394de11d637)# Vdio - Creative Video Editing Platform
 
 **Vdio** is a full-stack video editing, learning, and challenge platform built with Flask, MongoDB, and JavaScript. It combines creative tools, educational tutorials, and interactive components for creators, editors, and students.
 
@@ -171,8 +171,19 @@ Visit: [http://localhost:5000](http://localhost:5000)
 ---
 
 ## Screenshots
+Home page
+![image](https://github.com/user-attachments/assets/50d53821-ad16-4851-948a-1f21ef831bb0)
+Transistion page
+![image](https://github.com/user-attachments/assets/c864aa82-7765-404c-9af3-c94fa0cb022b)
+Music page
+![image](https://github.com/user-attachments/assets/56483cd1-35da-43fa-883f-4b4bcaf8d343)
+Style page
+![image](https://github.com/user-attachments/assets/5124dd84-25f7-44f2-9d1a-ade85923b5b6)
+Converter tool
+![image](https://github.com/user-attachments/assets/b045fc62-e7d2-456a-8c38-61ca2eec1cf3)
+Trimmer tool
+![image](https://github.com/user-attachments/assets/94b21aad-9839-4612-88d2-2b64bcb22406)
 
-*You can add screenshots here to showcase:*
 
 ### UI Pages
 
