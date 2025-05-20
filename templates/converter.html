@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
   <title>Video Converter</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/convert.css') }}"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
@@ -13,11 +13,10 @@
   <video autoplay muted loop playsinline id="bg-video">
     <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
   </video>
-  
-  <!-- Sidebar Nav -->
+
   <nav id="sidebar">
     
-    
+    <h2><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;"></h2> 
     <h2>Account</h2>
     <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
       <i class="fa-solid fa-user"></i><span class="text">Login</span>
@@ -58,7 +57,7 @@
       <i class="fa-solid fa-download"></i><span class="text">Free Stock Video & Music</span>
     </a>
   </nav>
-  <!-- Main Content -->
+
   <div class="content">
     <header>
       <h1><i class="fa-solid fa-arrows-spin"></i> Video Converter</h1>
@@ -75,7 +74,6 @@
 
         <div class="card">
           <h3>Choose Output Format</h3>
-          <p>Select the format you want to convert your video into.</p>
           <select id="formatSelect">
             <option value="mp4">MP4</option>
             <option value="avi">AVI</option>
@@ -86,50 +84,48 @@
 
         <div class="card">
           <h3>Start Conversion</h3>
-          <p>Click the button below to begin the conversion process.</p>
           <button class="btn" onclick="convertVideo()">Convert Now</button>
         </div>
       </div>
-
       <div id="conversionMessage" style="margin-top: 20px;"></div>
     </section>
   </div>
 
   <script>
-function convertVideo() {
-  const videoFile = document.getElementById("videoInput").files[0];
-  const format = document.getElementById("formatSelect").value;
-  const message = document.getElementById("conversionMessage");
+    function convertVideo() {
+      const videoFile = document.getElementById("videoInput").files[0];
+      const format = document.getElementById("formatSelect").value;
+      const message = document.getElementById("conversionMessage");
 
-  if (!videoFile) {
-    message.innerHTML = "<p style='color: red;'>Please select a video file.</p>";
-    return;
-  }
+      if (!videoFile) {
+        message.innerHTML = "<p style='color: red;'>Please select a video file.</p>";
+        return;
+      }
 
-  const formData = new FormData();
-  formData.append("video", videoFile);
-  formData.append("format", format);
+      const formData = new FormData();
+      formData.append("video", videoFile);
+      formData.append("format", format);
 
-  fetch("/convert", {
-    method: "POST",
-    body: formData,
-  })
-  .then(response => {
-    if (!response.ok) throw new Error("Conversion failed.");
-    return response.blob();
-  })
-  .then(blob => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `converted.${format}`;
-    a.click();
-    message.innerHTML = `<p style='color: green;'>✅ Converted successfully!</p>`;
-  })
-  .catch(() => {
-    message.innerHTML = "<p style='color: red;'>❌ Conversion failed.</p>";
-  });
-}
-</script>
+      fetch("/convert", {
+        method: "POST",
+        body: formData,
+      })
+      .then(response => {
+        if (!response.ok) throw new Error("Conversion failed.");
+        return response.blob();
+      })
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `converted.${format}`;
+        a.click();
+        message.innerHTML = `<p style='color: green;'>✅ Converted successfully!</p>`;
+      })
+      .catch(() => {
+        message.innerHTML = "<p style='color: red;'>❌ Conversion failed.</p>";
+      });
+    }
+  </script>
 </body>
 </html>

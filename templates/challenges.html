@@ -3,12 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
   <title>Vdio | Challenges</title>
 
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/challenges.css') }}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  
+
+  <style>
+    .toast-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(to right, #00cc66, #009944);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      opacity: 0;
+      z-index: 9999;
+      pointer-events: none;
+      transition: opacity 0.4s ease, bottom 0.4s ease;
+    }
+    .toast-message.show {
+      opacity: 1;
+      bottom: 50px;
+    }
+  </style>
 </head>
 <body>
   <video autoplay muted loop playsinline id="bg-video">
@@ -35,51 +57,82 @@
 
   <div class="content">
     <section class="challenge-intro">
-      <h2>Weekly Video Editing Challenge </h2>
+      <h2>Weekly Video Editing Challenge</h2>
       <p>Unleash your creativity and compete with editors around the world. Submit your edit, get featured, and win exciting prizes!</p>
-      <form id="challengeForm">
+      
+      <form id="challengeForm" enctype="multipart/form-data">
         <select name="title" required>
           <option value="">-- Select a Challenge --</option>
-          <option value="Slow Motion Mastery"> Slow Motion Mastery</option>
-          <option value="Light Flicker FX"> Light Flicker FX</option>
-          <option value="Action Cut Sync"> Action Cut Sync</option>
+          <option value="Slow Motion Mastery">Slow Motion Mastery</option>
+          <option value="Light Flicker FX">Light Flicker FX</option>
+          <option value="Action Cut Sync">Action Cut Sync</option>
         </select>
-        <input type="email" name="user" placeholder="Your Email" required>
+        <input type="file" name="edit" accept="video/*" required />
         <button type="submit" class="cta-button">Submit My Edit</button>
       </form>
     </section>
 
     <section class="challenge-grid">
       <div class="challenge-card">
-        <h3> Theme: Slow Motion Mastery</h3>
+        <h3>Theme: Slow Motion Mastery</h3>
         <p>Use slow motion creatively. Impress us with cinematic timing!</p>
       </div>
       <div class="challenge-card">
-        <h3> Theme: Light Flicker FX</h3>
+        <h3>Theme: Light Flicker FX</h3>
         <p>Create an edit using high-energy flicker transitions and glowing effects.</p>
       </div>
       <div class="challenge-card">
-        <h3> Theme: Action Cut Sync</h3>
+        <h3>Theme: Action Cut Sync</h3>
         <p>Cut to the beat, match movement, and make it hit hard!</p>
       </div>
     </section>
   </div>
 
+  <div id="challengeToast" class="toast-message">Challenge Submitted</div>
+
   <script>
+    function showToast(msg = "Challenge Submitted") {
+      const toast = document.getElementById("challengeToast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
     document.getElementById('challengeForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const title = this.title.value;
-      const user = this.user.value;
+      const form = new FormData(this);
+      const file = form.get("edit");
+      const submitBtn = this.querySelector("button");
 
-      const res = await fetch("/submit_challenge", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, user })
-      });
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
 
-      const data = await res.json();
-      alert(data.msg || "Submitted!");
-      this.reset();
+      // Optional: Check file size (100MB max)
+      if (file && file.size > 100 * 1024 * 1024) {
+        showToast("File too large. Max 100MB.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit My Edit";
+        return;
+      }
+
+      try {
+        const res = await fetch("/submit_challenge", {
+          method: "POST",
+          body: form
+        });
+
+        if (!res.ok) throw new Error("Server error");
+
+        const data = await res.json();
+        showToast(data.msg || "Challenge submitted successfully");
+        this.reset();
+      } catch (err) {
+        showToast("Submission failed. Try again.");
+        console.error("Error:", err);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit My Edit";
+      }
     });
   </script>
 </body>

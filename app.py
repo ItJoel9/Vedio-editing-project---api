@@ -2,6 +2,8 @@ from flask import (
     Flask, request, jsonify, render_template,
     send_file, session, redirect, url_for, send_from_directory
 )
+import subprocess
+from werkzeug.utils import secure_filename
 from flask import render_template_string
 
 from spotipy.exceptions import SpotifyException
@@ -356,15 +358,34 @@ def reject_challenge():
     mongo.db.challenges.update_one({"title": title}, {"$set": {"status": "rejected"}})
     return "Challenge rejected"
 
+
 @app.route("/submit_challenge", methods=["POST"])
 def submit_challenge():
-    data = request.get_json()
+    title = request.form.get("title")
+    file = request.files.get("edit")
+
+    # 🔒 Use logged-in user's email from session
+    user_email = session.get("email") or session.get("user")  # adjust key based on your login logic
+
+    if not title or not user_email or not file:
+        return jsonify({"msg": "Missing data"}), 400
+
+    # Save the file securely
+    filename = secure_filename(file.filename)
+    upload_path = os.path.join("static", "uploads", "challenges")
+    os.makedirs(upload_path, exist_ok=True)
+    file_path = os.path.join(upload_path, filename)
+    file.save(file_path)
+
+    # Save submission to MongoDB
     mongo.db.challenges.insert_one({
-        "title": data["title"],
-        "user": data["user"],
+        "title": title,
+        "user": user_email,
+        "filename": filename,
         "status": "pending"
     })
-    return jsonify({"msg": "Challenge submitted!"}), 200
+
+    return jsonify({"msg": "Challenge submitted successfully"}), 200
 
 @app.route("/update_exp", methods=["POST"])
 def update_exp():
@@ -439,6 +460,33 @@ def dashboard():
 
 @app.route("/transitions")
 def transitions_page(): return render_template("transitions.html")
+
+@app.route("/api/mark_transition", methods=["POST"])
+def mark_transition():
+    user_id = session.get("user_id")
+    data = request.get_json()
+    video_id = data.get("video_id")
+
+    if not user_id or not video_id:
+        return jsonify({"error": "Missing data"}), 400
+
+    mongo.db.tutorial_progress.update_one(
+        {"user_id": user_id},
+        {"$addToSet": {"completed": video_id}},
+        upsert=True
+    )
+    return jsonify({"message": "Progress saved"}), 200
+
+@app.route("/api/user_progress")
+def get_user_progress():
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"completed": []})
+    
+    doc = mongo.db.tutorial_progress.find_one({"user_id": user_id})
+    return jsonify(doc or {"completed": []})
+
+
 @app.route("/styles")
 def styles_page(): return render_template("styles.html")
 @app.route("/platforms")
@@ -447,6 +495,33 @@ def platforms_page(): return render_template("platforms.html")
 def apps_page(): return render_template("apps.html")
 @app.route("/converter")
 def converter_page(): return render_template("converter.html")
+@app.route("/convert", methods=["POST"])
+def convert_video():
+    video = request.files.get("video")
+    target_format = request.form.get("format", "mp4")
+
+    if not video:
+        return "No video uploaded.", 400
+
+    filename = secure_filename(video.filename)
+    base_name = f"{uuid.uuid4().hex}_{os.path.splitext(filename)[0]}"
+    input_path = os.path.join(app.config["UPLOAD_FOLDER"], f"{base_name}.{filename.split('.')[-1]}")
+    output_path = os.path.join(app.config["UPLOAD_FOLDER"], f"{base_name}.{target_format}")
+
+    video.save(input_path)
+
+    try:
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", input_path, output_path],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+    except subprocess.CalledProcessError as e:
+        print("FFmpeg failed:", e)
+        return "Conversion failed", 500
+
+    return send_file(output_path, as_attachment=True, download_name=f"converted.{target_format}")
 @app.route("/trimmer")
 def trimmer_page(): return render_template("trimmer.html")
 @app.route("/grading")

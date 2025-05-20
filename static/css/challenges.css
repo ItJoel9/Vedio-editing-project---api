@@ -120,8 +120,39 @@ nav:hover ~ .content {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
   margin-bottom: 40px;
   text-align: center;
+}.challenge-intro form {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
+.challenge-intro input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background: linear-gradient(120deg, #1a1a1a, #000000);
+  color: #ffffff;
+  transition: border 0.3s ease;
+}
+
+.challenge-intro input[type="file"]::-webkit-file-upload-button {
+  background: #5e5e5e;
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background 0.3s ease;
+}
+
+.challenge-intro input[type="file"]::-webkit-file-upload-button:hover {
+  background: #2aa90e;
+}
 .challenge-intro h2 {
   color: #ffffff;
   font-size: 2rem;
@@ -140,7 +171,7 @@ nav:hover ~ .content {
   display: block;
   width: 100%;
   padding: 12px 14px;
-  margin: 10px 0;
+  margin: 12px 0;
   border-radius: 8px;
   border: none;
   font-size: 1rem;
@@ -176,7 +207,7 @@ nav:hover ~ .content {
 }
 
 .cta-button:hover {
-  background: linear-gradient(120deg, #d1d1d1, #ffffff);
+  background: linear-gradient(120deg, #f40000, #000000);
   transform: scale(1.05);
 }
 
@@ -209,4 +240,24 @@ nav:hover ~ .content {
 .challenge-card p {
   color: #ccc;
   font-size: 0.95rem;
+}
+.toast-message {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(to right, #00cc66, #009944);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  opacity: 0;
+  z-index: 9999;
+  pointer-events: none;
+  transition: opacity 0.4s ease, bottom 0.4s ease;
+}
+.toast-message.show {
+  opacity: 1;
+  bottom: 50px;
 }

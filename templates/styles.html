@@ -66,8 +66,8 @@
 </video>
 
   <nav id="sidebar">
-    
-  <h2><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;"></h2> 
+  
+<h2><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;"></h2> 
   <h2>Account</h2>
   <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}"><span>
     <i class="fa-solid fa-user"></span></i><span class="text">Login</span>

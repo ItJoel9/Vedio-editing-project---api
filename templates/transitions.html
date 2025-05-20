@@ -94,117 +94,147 @@
   <script src="{{ url_for('static', filename='js/learner.js') }}"></script>
 
   <script>
-    const API_KEY = "AIzaSyAB9xyME7ZRvDLy-XgLop67SdLna1WWdkQ";
-    const PLAYLIST_ID = "PLYhQoLRgwwsAgnWDFSi5Lzjzd1iL_DAUW";
-    const allVideos = [];
-  
-    function simplifyTitle(original) {
-      const lower = original.toLowerCase();
-      if (lower.includes("glitch")) return "Glitch Transition";
-      if (lower.includes("zoom")) return "Zoom Transition";
-      if (lower.includes("swipe")) return "Swipe Transition";
-      if (lower.includes("shake")) return "Shake FX";
-      if (lower.includes("spin")) return "Spin Zoom";
-      if (lower.includes("slide")) return "Slide FX";
-      if (lower.includes("text")) return "Text Reveal";
-      return "Transition Tutorial";
-    }
-  
-    async function loadPlaylistVideos() {
-      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${PLAYLIST_ID}&key=${API_KEY}`;
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-  
-        const viewed = JSON.parse(localStorage.getItem("viewedTransitions") || "[]");
-        allVideos.length = 0;
-  
-        data.items.forEach(item => {
-          const videoId = item.snippet.resourceId.videoId;
-          const rawTitle = item.snippet.title;
-          const thumbnail = item.snippet.thumbnails?.medium?.url || "";
-          const cleanTitle = simplifyTitle(rawTitle);
-  
-          let tag = "other";
-          const lower = rawTitle.toLowerCase();
-          if (lower.includes("glitch")) tag = "glitch";
-          else if (lower.includes("zoom")) tag = "zoom";
-          else if (lower.includes("swipe")) tag = "swipe";
-          else if (lower.includes("spin")) tag = "spin";
-  
-          const isCompleted = viewed.includes(videoId);
-  
-          allVideos.push({
-            id: videoId,
-            title: cleanTitle,
-            rawTitle,
-            thumbnail,
-            tag,
-            completed: isCompleted
-          });
-        });
-  
-        renderFilteredVideos("All");
-        updateProgress();
-  
-      } catch (err) {
-        console.error("Failed to load playlist videos:", err);
-        document.getElementById("videoList").innerHTML = "<p style='color:red;'>Failed to load videos.</p>";
-      }
-    }
-  
-    function renderFilteredVideos(filter = "All") {
-      const container = document.getElementById("videoList");
-      container.innerHTML = "";
-  
-      const filtered = filter === "All"
-        ? allVideos
-        : allVideos.filter(v => v.tag === filter.toLowerCase());
-  
-      filtered.forEach(video => {
-        const card = document.createElement("a");
-        card.href = `/transition_tutorial?vid=${video.id}`;
-        card.className = "video-card";
-        card.innerHTML = `
-          <img src="${video.thumbnail}" alt="${video.title}">
-          <div class="video-title" title="${video.rawTitle}">
-            ${video.title} ${video.completed ? "✅" : ""}
-          </div>
-        `;
-  
-        // When clicked, mark as watched
-        card.addEventListener("click", () => {
-          const viewed = JSON.parse(localStorage.getItem("viewedTransitions") || "[]");
-          if (!viewed.includes(video.id)) {
-            viewed.push(video.id);
-            localStorage.setItem("viewedTransitions", JSON.stringify(viewed));
-          }
-        });
-  
-        container.appendChild(card);
+// Full Updated JavaScript for Transitions Page with Search Functionality
+const API_KEY = "AIzaSyAB9xyME7ZRvDLy-XgLop67SdLna1WWdkQ";
+const PLAYLIST_ID = "PLYhQoLRgwwsAgnWDFSi5Lzjzd1iL_DAUW";
+const allVideos = [];
+let viewed = [];
+
+const userId = "{{ user_id }}"; // passed from Flask
+
+function simplifyTitle(original) {
+  const lower = original.toLowerCase();
+  if (lower.includes("glitch")) return "Glitch Transition";
+  if (lower.includes("zoom")) return "Zoom Transition";
+  if (lower.includes("swipe")) return "Swipe Transition";
+  if (lower.includes("shake")) return "Shake FX";
+  if (lower.includes("spin")) return "Spin Zoom";
+  if (lower.includes("slide")) return "Slide FX";
+  if (lower.includes("text")) return "Text Reveal";
+  return "Transition Tutorial";
+}
+
+async function loadUserProgress() {
+  try {
+    const res = await fetch(`/api/user_progress`);
+    const data = await res.json();
+    viewed = data.completed || [];
+  } catch (err) {
+    console.error("Progress fetch failed:", err);
+    viewed = [];
+  }
+}
+
+async function loadPlaylistVideos() {
+  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${PLAYLIST_ID}&key=${API_KEY}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    allVideos.length = 0;
+
+    data.items.forEach(item => {
+      const videoId = item.snippet.resourceId.videoId;
+      const rawTitle = item.snippet.title;
+      const thumbnail = item.snippet.thumbnails?.medium?.url || "";
+      const cleanTitle = simplifyTitle(rawTitle);
+
+      let tag = "other";
+      const lower = rawTitle.toLowerCase();
+      if (lower.includes("glitch")) tag = "glitch";
+      else if (lower.includes("zoom")) tag = "zoom";
+      else if (lower.includes("swipe")) tag = "swipe";
+      else if (lower.includes("spin")) tag = "spin";
+
+      const isCompleted = viewed.includes(videoId);
+
+      allVideos.push({
+        id: videoId,
+        title: cleanTitle,
+        rawTitle,
+        thumbnail,
+        tag,
+        completed: isCompleted
       });
-    }
-  
-    function updateProgress() {
-      const viewed = JSON.parse(localStorage.getItem("viewedTransitions") || "[]");
-      const completed = allVideos.filter(v => viewed.includes(v.id)).length;
-      const total = allVideos.length;
-  
-      const progressEl = document.querySelector(".progress p");
-      if (progressEl) {
-        progressEl.innerHTML = `Completed: ${completed} / ${total} tutorials`;
-      }
-    }
-  
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll(".filter-buttons button").forEach(btn => {
-        btn.addEventListener("click", () => {
-          renderFilteredVideos(btn.textContent);
-        });
-      });
-  
-      loadPlaylistVideos();
     });
+
+    renderFilteredVideos("All");
+    updateProgress();
+  } catch (err) {
+    console.error("Failed to load playlist videos:", err);
+    document.getElementById("videoList").innerHTML = "<p style='color:red;'>Failed to load videos.</p>";
+  }
+}
+
+function renderFilteredVideos(filter = "All") {
+  const container = document.getElementById("videoList");
+  container.innerHTML = "";
+
+  const searchTerm = document.querySelector(".search-bar input").value.toLowerCase();
+  const filtered = allVideos.filter(v => {
+    const matchFilter = filter === "All" || v.tag === filter.toLowerCase();
+    const matchSearch = v.title.toLowerCase().includes(searchTerm) || v.rawTitle.toLowerCase().includes(searchTerm);
+    return matchFilter && matchSearch;
+  });
+
+  filtered.forEach(video => {
+    const card = document.createElement("a");
+    card.href = `/transition_tutorial?vid=${video.id}`;
+    card.className = "video-card";
+    card.innerHTML = `
+      <img src="${video.thumbnail}" alt="${video.title}">
+      <div class="video-title" title="${video.rawTitle}">
+        ${video.title} ${video.completed ? "✅" : ""}
+      </div>
+    `;
+
+    card.addEventListener("click", () => {
+      fetch("/api/mark_transition", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ video_id: video.id })
+      }).then(() => {
+        if (!viewed.includes(video.id)) {
+          viewed.push(video.id);
+          const vid = allVideos.find(v => v.id === video.id);
+          if (vid) vid.completed = true;
+          updateProgress();
+          renderFilteredVideos(filter);
+        }
+      });
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function updateProgress() {
+  const completed = allVideos.filter(v => viewed.includes(v.id)).length;
+  const total = allVideos.length;
+  const progressEl = document.querySelector(".progress p");
+  if (progressEl) {
+    progressEl.innerText = `Completed: ${completed} / ${total} tutorials`;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  document.querySelectorAll(".filter-buttons button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      renderFilteredVideos(btn.textContent);
+    });
+  });
+
+  document.querySelector(".search-bar button").addEventListener("click", () => {
+    renderFilteredVideos("All");
+  });
+
+  document.querySelector(".search-bar input").addEventListener("keyup", (e) => {
+    if (e.key === "Enter") renderFilteredVideos("All");
+  });
+
+  await loadUserProgress();
+  await loadPlaylistVideos();
+});
+
   </script>
   
 

@@ -135,31 +135,39 @@
     const searchInput = document.querySelector('.search-bar input');
 
     searchBtn.addEventListener('click', () => {
-      const query = searchInput.value.trim().toLowerCase();
-      if (!query) return;
+  const query = searchInput.value.trim().toLowerCase();
+  if (!query) return;
 
-      if (query.includes('transition')) {
-        window.location.href = "{{ url_for('transitions_page') }}";
-      } else if (query.includes('music')) {
-        window.location.href = "{{ url_for('music_page') }}";
-      } else if (query.includes('style')) {
-        window.location.href = "{{ url_for('styles_page') }}";
-      } else if (query.includes('platform')) {
-        window.location.href = "{{ url_for('platforms_page') }}";
-      } else if (query.includes('app')) {
-        window.location.href = "{{ url_for('apps_page') }}";
-      } else if (query.includes('converter')) {
-        window.location.href = "{{ url_for('converter_page') }}";
-      } else if (query.includes('trimmer')) {
-        window.location.href = "{{ url_for('trimmer_page') }}";
-      } else if (query.includes('dashboard')) {
-        window.location.href = "{{ url_for('dashboard') }}";
-      } else if (query.includes('login')) {
-        window.location.href = "{{ url_for('login_page') }}";
-      } else {
-        alert("Sorry! We couldn't find anything for: " + query);
-      }
-    });
+  if (query.includes('transition')) {
+    window.location.href = "{{ url_for('transitions_page') }}";
+  } else if (query.includes('music')) {
+    window.location.href = "{{ url_for('music_page') }}";
+  } else if (query.includes('style')) {
+    window.location.href = "{{ url_for('styles_page') }}";
+  } else if (query.includes('platform')) {
+    window.location.href = "{{ url_for('platforms_page') }}";
+  } else if (query.includes('app')) {
+    window.location.href = "{{ url_for('apps_page') }}";
+  } else if (query.includes('converter')) {
+    window.location.href = "{{ url_for('converter_page') }}";
+  } else if (query.includes('trimmer')) {
+    window.location.href = "{{ url_for('trimmer_page') }}";
+  } else if (query.includes('dashboard')) {
+    window.location.href = "{{ url_for('dashboard') }}";
+  } else if (query.includes('login')) {
+    window.location.href = "{{ url_for('login_page') }}";
+  } else {
+    alert("Sorry! We couldn't find anything for: " + query);
+  }
+});
+
+searchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    searchBtn.click(); // 🔁 Triggers the above logic
+  }
+});
+
 
     // 💡 Tip of the Day Logic
     const tips = [

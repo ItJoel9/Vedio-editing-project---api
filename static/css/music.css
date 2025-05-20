@@ -216,7 +216,7 @@ nav:hover ~ .main {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
   background: #121212;
   padding: 10px 16px;
   border-radius: 10px;
@@ -240,9 +240,9 @@ nav:hover ~ .main {
 .ranking-track iframe {
   flex-grow: 1;
   min-width: 280px;
-  max-width: 500px;
+  max-width: 950px;
   height: 80px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: none;
 }
 .ranking-item {
@@ -276,7 +276,7 @@ nav:hover ~ .main {
   color: #c0c0c0;
 }
 .vote-icons i.active {
-  color: #c0c0c0;
+  color: #ff0000;
 }
 
 /* --- Responsive --- */
