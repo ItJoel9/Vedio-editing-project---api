@@ -209,5 +209,8 @@ Trimmer tool
                   joelkmathews2005@gmail.com
 
 **License:** Educational Use Only. No license currently applied.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/38dc71e6-8a29-416f-add1-39403f87a736" alt="Vdio Logo" width="100">
+</p>
 
 ---
