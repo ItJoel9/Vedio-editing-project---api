@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vdio | Learn Transitions</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/learner.css') }}" />
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 </head>
 <body>
@@ -17,10 +17,11 @@
   <!-- Sidebar Navigation -->
   <nav id="sidebar">
     
-    
+    <h2><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;"></h2>
     <h2>Account</h2>
+    
     <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
-      <i class="fa-solid fa-user"></i><span class="text">Login</span>
+      <i class="fa-solid fa-user"></i><span class="text">Signout</span>
     </a>
     <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
       <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>

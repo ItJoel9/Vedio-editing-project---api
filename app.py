@@ -81,13 +81,13 @@ def oauth2callback():
     session_path = os.path.join(app.config["TEMP_SESSION"], f"{file_id}.json")
 
     if not file_id or not os.path.exists(session_path):
-        return "<h2 style='color:red;'>❌ Error: No video file found. Try exporting again.</h2>"
+        return "<h2 style='color:red;'> Error: No video file found. Try exporting again.</h2>"
 
     with open(session_path) as f:
         data = json.load(f)
 
     if not os.path.exists(data["filepath"]):
-        return "<h2 style='color:red;'>❌ Video file no longer exists. Try exporting again.</h2>"
+        return "<h2 style='color:red;'> Video file no longer exists. Try exporting again.</h2>"
 
     try:
         flow = Flow.from_client_secrets_file(
@@ -99,7 +99,7 @@ def oauth2callback():
         creds = flow.credentials
         youtube = build("youtube", "v3", credentials=creds)
     except Exception as e:
-        return f"<h1 style='color:red;'>❌ OAuth Error</h1><pre>{str(e)}</pre>"
+        return f"<h1 style='color:red;'> OAuth Error</h1><pre>{str(e)}</pre>"
 
     request_body = {
         "snippet": {
@@ -138,14 +138,14 @@ def oauth2callback():
 
         video_id = upload_response['id']
         return f"""
-        <h1 style='color: green;'>✅ Upload Successful!</h1>
+        <h1 style='color: green;'> Upload Successful!</h1>
         <p>Video ID: <code>{video_id}</code></p>
         <a href="https://www.youtube.com/watch?v={video_id}" target="_blank">🎬 Watch on YouTube</a>
         """
 
     except Exception as e:
         return f"""
-        <h1 style='color:red;'>❌ Upload Failed</h1>
+        <h1 style='color:red;'> Upload Failed</h1>
         <pre>{str(e)}</pre>
         """
 
@@ -218,7 +218,7 @@ def trim_audio():
         try:
             original_audio = AudioSegment.from_file(temp_in.name)
         except Exception as e:
-            print(f"❌ Audio decode error: {e}")
+            print(f" Audio decode error: {e}")
             return "Failed to process audio", 400
 
         # Apply keep/remove logic
@@ -287,7 +287,7 @@ def music_page():
                             "spotify_id": track["id"]
                         })
             except SpotifyException as e:
-                print(f"❌ Error fetching {pid}: {e}")
+                print(f" Error fetching {pid}: {e}")
                 continue
 
     # Limit to top 10 tracks per genre
@@ -321,15 +321,15 @@ def login():
         role = user.get("role", "user")
         user_id = str(user["_id"])
 
-        # ✅ Set session values
+        #  Set session values
         session["user_id"] = user_id
         session["email"] = user["email"]
         session["role"] = role
 
-        # ✅ Return user_id in the response
+        #  Return user_id in the response
         return jsonify({
             "msg": "Login successful",
-            "user_id": user_id,  # 🔥 This is the key line
+            "user_id": user_id,  #  This is the key line
             "email": user["email"],
             "name": user["name"],
             "role": role,
@@ -376,7 +376,7 @@ def update_exp():
         return jsonify({"error": "Missing data"}), 400
 
     try:
-        print("🛠️ Received EXP update request:", data)
+        print(" Received EXP update request:", data)
 
         result = mongo.db.users.update_one(
             {"_id": ObjectId(user_id)},
@@ -393,7 +393,7 @@ def update_exp():
         }), 200
 
     except Exception as e:
-        print("❌ EXP update error:", e)
+        print(" EXP update error:", e)
         return jsonify({"error": "Server error"}), 500
 
 @app.route("/get_user_exp", methods=["POST"])
@@ -469,7 +469,7 @@ def admin_panel():
         "visits": 1200  # placeholder
     }
 
-    # 🧠 TOOL USAGE LOGS
+    #  TOOL USAGE LOGS
     from collections import defaultdict
     tool_usage = mongo.db.tool_logs.find()
     tool_map = defaultdict(list)
@@ -555,7 +555,7 @@ def fetch_and_store_track_features(track_id):
             "timestamp": datetime.now(timezone.utc)
         })
     except Exception as e:
-        print(f"❌ Error fetching Spotify track {track_id}:", e)
+        print(f" Error fetching Spotify track {track_id}:", e)
 
 
 @app.route("/vote_track", methods=["POST"])
@@ -657,7 +657,7 @@ def spotify_recommendations():
     results = []
     for track in recommendations:
         results.append({
-            "track_id": track.get("track_id", ""),  # ✅ added this
+            "track_id": track.get("track_id", ""),  
             "title": track.get("name", "Unknown"),
             "artist": track.get("artist", ""),
         })
@@ -689,9 +689,9 @@ def fix_missing_features():
                 )
                 fixed += 1
             except:
-                print("❌ Couldn't fix features for:", tid)
+                print(" Couldn't fix features for:", tid)
 
-    return f"<h2>✅ Fixed features for {fixed} liked tracks</h2>"
+    return f"<h2> Fixed features for {fixed} liked tracks</h2>"
 
 
 @app.route("/recommendations/<user_id>")
@@ -717,8 +717,8 @@ def recommend_tracks(user_id):
                 "name": track.get("name", "Unknown"),
                 "artist": track.get("artist", ""),
                 "album": track.get("album", ""),
-                "preview_url": track.get("preview_url", ""),  # ✅ NEW
-                "cover_url": track.get("cover_url", "")       # ✅ NEW
+                "preview_url": track.get("preview_url", ""),  
+                "cover_url": track.get("cover_url", "")       
             })
             if track["track_id"] in liked_ids:
                 liked_vecs.append(vec)
@@ -751,11 +751,11 @@ def build_spotify_tracks_metadata_only():
 
     for pid in playlists:
         try:
-            print(f"\n🎧 Fetching playlist: {pid}")
+            print(f"\n Fetching playlist: {pid}")
             results = sp.playlist_tracks(pid)
-            print(f"✅ {len(results['items'])} tracks found in {pid}")
+            print(f" {len(results['items'])} tracks found in {pid}")
         except Exception as e:
-            print(f"❌ Error fetching playlist {pid}")
+            print(f" Error fetching playlist {pid}")
             traceback.print_exc()
             errors += 1
             continue
@@ -763,7 +763,7 @@ def build_spotify_tracks_metadata_only():
         for item in results["items"]:
             track = item.get("track")
             if not track or not track.get("id"):
-                print("⚠️ Skipped null or missing track ID")
+                print(" Skipped null or missing track ID")
                 skipped += 1
                 continue
 
@@ -783,18 +783,18 @@ def build_spotify_tracks_metadata_only():
                     },
                     upsert=True
                 )
-                print(f"✅ Inserted {track['name']} ({track_id})")
+                print(f" Inserted {track['name']} ({track_id})")
                 inserted += 1
             except Exception as e:
-                print(f"❌ DB insert failed for {track_id}")
+                print(f" DB insert failed for {track_id}")
                 traceback.print_exc()
                 errors += 1
 
     return render_template_string("""
         <h2 style='font-family:monospace; line-height:1.8'>
-        ✅ Inserted: {{ inserted }}<br>
-        ⚠️ Skipped: {{ skipped }}<br>
-        ❌ Errors: {{ errors }}
+            Inserted: {{ inserted }}<br>
+            Skipped: {{ skipped }}<br>
+            Errors: {{ errors }}
         </h2>
     """, inserted=inserted, skipped=skipped, errors=errors)
 
@@ -829,14 +829,14 @@ def upgrade_spotify_features():
                     }
                 }}
             )
-            print(f"🎯 Features added for {track.get('name')}")
+            print(f" Features added for {track.get('name')}")
             updated += 1
         except Exception as e:
-            print(f"❌ Failed on {track_id}")
+            print(f" Failed on {track_id}")
             traceback.print_exc()
             skipped += 1
 
-    return f"<h2>🎧 Features Updated: {updated}<br>⚠️ Skipped: {skipped}</h2>"
+    return f"<h2> Features Updated: {updated}<br>⚠️ Skipped: {skipped}</h2>"
 
 
 @app.route("/spotify_track_count")
@@ -848,7 +848,7 @@ def track_count():
 with app.app_context():
     track_count = mongo.db.spotify_tracks.count_documents({})
     if track_count == 0:
-        print("⚡ No spotify_tracks found. Auto-building metadata...")
+        print(" No spotify_tracks found. Auto-building metadata...")
         playlists = ["5mu8Az12kwWkPZKAxAUjnK"]  # you can add more playlists here
 
         for pid in playlists:
@@ -871,11 +871,11 @@ with app.app_context():
                             },
                             upsert=True
                         )
-                print(f"✅ Auto-imported songs from playlist {pid}")
+                print(f" Auto-imported songs from playlist {pid}")
             except Exception as e:
-                print(f"❌ Error auto-fetching playlist {pid}:", e)
+                print(f" Error auto-fetching playlist {pid}:", e)
     else:
-        print(f"✅ {track_count} tracks already loaded. Skipping auto-build.")
+        print(f" {track_count} tracks already loaded. Skipping auto-build.")
 
 
 # === RUN === #

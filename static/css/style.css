@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-/* Global Styles */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -34,7 +33,6 @@ html {
   transform: translateY(0);
 }
 
-/* === Sidebar Navigation with Video Background === */
 nav {
   width: 60px;
   background: #1a1a1a;
@@ -59,8 +57,6 @@ nav::-webkit-scrollbar {
   display: none;
 }
 
-
-
 nav::before {
   content: '';
   position: absolute;
@@ -72,8 +68,6 @@ nav::before {
   backdrop-filter: blur(6px);
   z-index: 1;
 }
-
-
 
 nav h2,
 nav a {
@@ -97,7 +91,7 @@ nav:hover h2 {
 nav a {
   display: flex;
   align-items: center;
-  color: #ff8500;
+  color: #ffffff;
   text-decoration: none;
   padding: 12px 15px;
   margin: 6px 0;
@@ -127,21 +121,20 @@ nav:hover a .text {
 }
 
 nav a:hover {
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #ffffff;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
+  color: #000000;
   transform: scale(1.05);
 }
 
 nav a.active {
-  background: #ff8500;
-  color: #ffffff;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
+  color: #000000;
 }
 nav a.active i,
 nav a.active .text {
-  color: #ffffff;
+  color: #000000;
 }
 
-/* Main Content */
 .content {
   margin-left: 80px;
   padding: 40px 20px;
@@ -151,7 +144,6 @@ nav:hover ~ .content {
   margin-left: 270px;
 }
 
-/* Header */
 header {
   text-align: center;
   margin-bottom: 20px;
@@ -162,10 +154,29 @@ header {
 }
 header h1 {
   font-size: 3rem;
-  color: #ff8500;
+  background: linear-gradient(45deg, #ffffff, #d1d1d1);
+  background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 3s ease infinite;
   display: flex;
   align-items: center;
 }
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+
 header img {
   height: 40px;
   width: auto;
@@ -178,13 +189,12 @@ header p {
   margin-top: 10px;
 }
 
-/* Search Section */
 .search-section {
   text-align: center;
   margin: 30px 0;
 }
 .search-section h2 {
-  color: #ff8500;
+  color: #ffffff;
   font-size: 1.2rem;
   margin-bottom: 10px;
 }
@@ -207,15 +217,15 @@ header p {
 .search-bar button {
   padding: 10px 20px;
   border: none;
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #fff;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
+  color: #000;
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s, transform 0.3s;
 }
 .search-bar button:hover {
-  background: linear-gradient(120deg, #e67e00, #ff8500);
+  background: linear-gradient(120deg, #d1d1d1, #ffffff);
   transform: scale(1.1);
 }
 .tip-button {
@@ -230,13 +240,12 @@ header p {
   background: rgba(0, 0, 0, 0.85);
   color: #fff;
   padding: 20px;
-  border: 2px dashed #ff8500;
+  border: 2px dashed #d1d1d1;
   border-radius: 10px;
   width: 60%;
   text-align: center;
 }
 
-/* Hero Section */
 .hero {
   text-align: center;
   position: relative;
@@ -276,7 +285,6 @@ header p {
   }
 }
 
-/* Challenges Section */
 .challenges {
   text-align: center;
   padding: 40px 20px;
@@ -287,7 +295,7 @@ header p {
   margin: 40px 0;
 }
 .challenges h2 {
-  color: #ff8500;
+  color: #ffffff;
   font-size: 2.5rem;
   margin-bottom: 20px;
   font-weight: 700;
@@ -301,26 +309,25 @@ header p {
   padding: 15px 30px;
   font-size: 1rem;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(120deg, #ff8500, #e67e00);
+  color: #000;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
   border: none;
   border-radius: 5px;
   text-decoration: none;
   transition: background 0.3s, transform 0.3s;
 }
 .cta-button:hover {
-  background: linear-gradient(120deg, #e67e00, #ff8500);
+  background: linear-gradient(120deg, #d1d1d1, #ffffff);
   transform: scale(1.1);
 }
 
-/* Trending Reels */
 .trending-edits {
   margin: 40px auto;
   max-width: 90%;
 }
 .trending-edits h2 {
   font-size: 2rem;
-  color: #ff8500;
+  color: #ffffff;
   font-weight: 700;
   margin-bottom: 20px;
   text-align: left;
@@ -343,7 +350,7 @@ header p {
 }
 .reel:hover {
   transform: scale(1.07);
-  box-shadow: 0 0 15px rgba(255, 133, 0, 0.4);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 .reel-thumbnail {
   width: 100%;
@@ -368,7 +375,6 @@ header p {
   opacity: 0.8;
 }
 
-/* Modal */
 .reel-modal {
   display: none;
   position: fixed;
@@ -389,7 +395,7 @@ header p {
   background: black;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 30px rgba(255, 133, 0, 0.3);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -405,19 +411,50 @@ header p {
   position: absolute;
   top: 10px;
   right: 15px;
-  background: rgba(255, 133, 0, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   border: none;
   font-size: 1.8rem;
-  color: white;
+  color: #000;
   padding: 0 12px;
   border-radius: 6px;
   cursor: pointer;
 }
 
-/* Footer */
 footer {
   text-align: center;
   margin-top: 20px;
-  color: #ff8500;
+  color: #ffffff;
   font-size: 0.9rem;
+}
+    body.sidebar-expanded nav {
+  width: 250px;
+  box-shadow: 4px 0 15px rgba(255, 255, 255, 0.1);
+}
+
+body.sidebar-expanded .content {
+  margin-left: 270px;
+}
+
+nav {
+  transition: width 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content {
+  transition: margin-left 0.3s ease;
+}
+
+.tip-popup {
+  display: none;
+  margin-top: 10px;
+  padding: 14px 16px;
+  background: rgba(40, 40, 40, 0.95);
+  border-left: 6px solid #d1d1d1; /* subtle silver accent */
+  color: #f0f0f0;
+  font-style: italic;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+  font-size: 0.95rem;
+  max-width: 320px;
+  line-height: 1.4;
+  backdrop-filter: blur(8px);
 }

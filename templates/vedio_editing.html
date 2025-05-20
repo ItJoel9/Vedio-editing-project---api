@@ -7,45 +7,22 @@
 
   <!-- Styles & Favicon -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <video autoplay muted loop playsinline id="bg-video">
     <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
   </video>
   
-  <style>
-    body.sidebar-expanded nav {
-      width: 250px;
-    }
-    body.sidebar-expanded .content {
-      margin-left: 270px;
-    }
-    nav {
-      transition: width 0.3s ease;
-    }
-    .content {
-      transition: margin-left 0.3s ease;
-    }
-    .tip-popup {
-      display: none;
-      margin-top: 10px;
-      padding: 12px;
-      background: #222;
-      border-left: 5px solid #ff8500;
-      color: #fff;
-      font-style: italic;
-      border-radius: 5px;
-    }
-  </style>
 </head>
 <body>
 
   <!-- Sidebar Navigation -->
   <nav id="sidebar">
+    <h2><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;"></h2>
     <h2>Account</h2>
     <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}">
-      <i class="fa-solid fa-user"></i><span class="text">Login</span>
+      <i class="fa-solid fa-user"></i><span class="text">Signout</span>
     </a>
     <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">
       <i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span>
@@ -86,7 +63,7 @@
   <!-- Main Content -->
   <div class="content">
     <header>
-      <h1><img src="{{ url_for('static', filename='media/v.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">dio</h1>
+      <h1><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">dio</h1>
       <p>Clueless? yeah me too</p>
     </header>
 

@@ -17,7 +17,7 @@ body {
   height: 100vh;
   object-fit: cover;
   z-index: -2;
-  opacity: 0.25; /* adjust for subtlety */
+  opacity: 0.25;
   pointer-events: none;
 }
 
@@ -58,7 +58,7 @@ nav:hover h2 {
 nav a {
   display: flex;
   align-items: center;
-  color: #ff8500;
+  color: #C0C0C0;
   text-decoration: none;
   padding: 12px 15px;
   margin: 6px 0;
@@ -84,29 +84,29 @@ nav:hover a .text {
   opacity: 1;
 }
 nav a:hover {
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #ffffff;
+  background: linear-gradient(120deg, #E0E0E0, #C0C0C0);
+  color: #000000;
   transform: scale(1.05);
 }
 nav a.active {
-  background: #ff8500;
-  color: #ffffff;
+  background: #C0C0C0;
+  color: #000000;
 }
 nav a.active i,
 nav a.active .text {
-  color: #ffffff;
+  color: #000000;
 }
 
 /* --- MAIN CONTENT AREA --- */
 .content {
-    margin-left: 80px;
-    padding: 60px 40px;
-    flex-grow: 1;
-    transition: margin-left 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  margin-left: 80px;
+  padding: 60px 40px;
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 nav:hover ~ .content {
   margin-left: 270px;
 }
@@ -117,7 +117,7 @@ header {
   margin-bottom: 20px;
 }
 header h1 {
-  color: #ff8500;
+  color: #E0E0E0;
   font-size: 3rem;
   margin: 0;
   font-weight: 700;
@@ -131,40 +131,38 @@ header p {
 
 /* --- SECTION LAYOUT --- */
 .tools-section {
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 40px;
-  }
-  
-  .card-grid {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 50px;
-    padding: 20px 0;
-  }
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 40px;
+}
+.card-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 50px;
+  padding: 20px 0;
+}
+
 /* --- CARD STYLE --- */
 .card {
-    background: #2a2a2a;
-    border-radius: 12px;
-    padding: 30px 25px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
-    width: 360px;
-  }
-
-
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 30px 25px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  width: 360px;
+}
 .card:hover {
   transform: scale(1.05);
 }
 .card h3 {
-  color: #ff8500;
+  color: #C0C0C0;
   font-size: 1.4rem;
   margin-bottom: 10px;
 }
 .card p {
-  color: #ddd;
+  color: #dddddd;
   font-size: 1rem;
   margin-bottom: 20px;
 }
@@ -175,7 +173,7 @@ header p {
   padding: 10px 15px;
   font-size: 1rem;
   border-radius: 8px;
-  border: 2px solid #ff8500;
+  border: 2px solid #C0C0C0;
   background: #1a1a1a;
   color: #fff;
   cursor: pointer;
@@ -183,10 +181,8 @@ header p {
 .card select {
   width: 60%;
 }
-
-/* Style the file input button */
 .card input[type="file"]::file-selector-button {
-  background: #ff8500;
+  background: #C0C0C0;
   color: #000;
   border: none;
   padding: 8px 12px;
@@ -200,8 +196,8 @@ header p {
 .btn {
   display: inline-block;
   margin-top: 15px;
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: white;
+  background: linear-gradient(120deg, #f8f9fa, #C0C0C0);
+  color: black;
   padding: 12px 24px;
   border-radius: 8px;
   border: none;
@@ -212,7 +208,7 @@ header p {
   transition: background 0.3s ease, transform 0.2s ease;
 }
 .btn:hover {
-  background: linear-gradient(120deg, #e67e00, #ff8500);
+  background: linear-gradient(120deg, #d1d1d1, #C0C0C0);
   transform: scale(1.05);
 }
 
@@ -221,14 +217,13 @@ header p {
   font-size: 1rem;
   text-align: center;
   margin-top: 20px;
-  color: #ff8500;
+  color: #C0C0C0;
 }
 nav a.active {
-  background: #ff8500;
-  color: #fff;
+  background: #C0C0C0;
+  color: #000;
 }
 nav a.active i,
 nav a.active .text {
-  color: #fff;
+  color: #000;
 }
-  

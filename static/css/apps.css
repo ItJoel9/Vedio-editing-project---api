@@ -9,6 +9,7 @@ body {
   color: #ffffff;
   display: flex;
 }
+
 #bg-video {
   position: fixed;
   top: 0;
@@ -17,9 +18,10 @@ body {
   height: 100vh;
   object-fit: cover;
   z-index: -2;
-  opacity: 0.25; /* adjust for subtlety */
+  filter: brightness(0.2);
   pointer-events: none;
 }
+
 /* --- SIDEBAR NAVIGATION --- */
 nav {
   width: 60px;
@@ -46,7 +48,11 @@ nav:hover {
 }
 
 nav h2 {
-  color: #ffffff;
+  background: linear-gradient(90deg, #ffffff, #d1d1d1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   text-align: center;
   margin: 20px 0;
   font-size: 1.8rem;
@@ -62,7 +68,11 @@ nav:hover h2 {
 nav a {
   display: flex;
   align-items: center;
-  color: #ff8500;
+  background: linear-gradient(90deg, #ffffff, #d1d1d1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   text-decoration: none;
   padding: 12px 15px;
   margin: 6px 0;
@@ -92,19 +102,19 @@ nav:hover a .text {
 }
 
 nav a:hover {
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #ffffff;
+  background: linear-gradient(90deg, #ffffff, #d1d1d1);
+  -webkit-text-fill-color: #000;
   transform: scale(1.05);
 }
 
 nav a.active {
-  background: #ff8500;
-  color: #ffffff;
+  background: linear-gradient(90deg, #ffffff, #d1d1d1);
+  -webkit-text-fill-color: #000;
 }
 
 nav a.active i,
 nav a.active .text {
-  color: #ffffff;
+  color: #000;
 }
 
 /* --- MAIN CONTENT --- */
@@ -126,7 +136,11 @@ header {
 }
 
 header h1 {
-  color: #ff8500;
+  background: linear-gradient(90deg, #ffffff, #d1d1d1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   font-size: 3rem;
   margin: 0;
   font-weight: 700;
@@ -140,14 +154,21 @@ header p {
 }
 
 /* --- SECTION TITLE --- */
-.section-header {
+.section-header,
+.section-title {
   font-size: 2rem;
-  color: #ff8500;
+  background: linear-gradient(90deg, #ffffff, #d1d1d1);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
-  text-shadow: 0 0 10px rgba(255, 133, 0, 0.5);
+  text-shadow: none;
+  border-bottom: 2px solid #444;
+  padding-bottom: 10px;
 }
 
 /* --- APP CARD GRID --- */
@@ -160,7 +181,8 @@ header p {
 
 /* --- INDIVIDUAL APP CARD --- */
 .card {
-  background: #2a2a2a;
+  background: #1a1a1a;
+  border: 1px solid #333;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -173,7 +195,11 @@ header p {
 }
 
 .card h3 {
-  color: #ff8500;
+  background: linear-gradient(90deg, #ffffff, #d1d1d1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   margin-top: 0;
   font-size: 1.4rem;
 }
@@ -185,10 +211,11 @@ header p {
 }
 
 /* --- BUTTON INSIDE CARDS --- */
-.card .btn {
+.card .btn,
+.btn {
   display: inline-block;
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: white;
+  background: linear-gradient(90deg, #ffffff, #d1d1d1);
+  color: #000;
   padding: 10px 16px;
   border-radius: 8px;
   text-decoration: none;
@@ -198,16 +225,30 @@ header p {
   cursor: pointer;
 }
 
-.card .btn:hover {
-  background: linear-gradient(120deg, #e67e00, #ff8500);
+.card .btn:hover,
+.btn:hover {
+  background: linear-gradient(90deg, #d1d1d1, #ffffff);
   transform: scale(1.05);
 }
-nav a.active {
-  background: #ff8500;
-  color: #fff;
+
+/* --- RANK BADGES --- */
+.rank-badge {
+  padding: 5px 12px;
+  font-size: 0.9rem;
+  border-radius: 30px;
+  font-weight: bold;
+  color: black;
 }
-nav a.active i,
-nav a.active .text {
-  color: #fff;
+
+.noob {
+  background: #00ff95;
 }
-  
+
+.mid {
+  background: #f7d200;
+}
+
+.pro {
+  background: #ff3c3c;
+  color: white;
+}

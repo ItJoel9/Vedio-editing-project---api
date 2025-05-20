@@ -14,47 +14,84 @@ nav {
   height: 100vh;
   padding: 20px 10px;
   position: fixed;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
   transition: width 0.3s ease;
   overflow-y: auto;
-  z-index: 1000;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-nav:hover { width: 250px; }
-nav::-webkit-scrollbar { display: none; }
+
+nav:hover {
+  width: 250px;
+}
+
+nav::-webkit-scrollbar {
+  display: none;
+}
 nav h2 {
   color: #ffffff;
-  font-size: 1.2rem;
-  margin: 10px 0;
   text-align: center;
+  margin: 20px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
 }
-nav:hover h2 { opacity: 1; }
+
+nav:hover h2 {
+  opacity: 1;
+}
+
 nav a {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #ff8500;
+  color: #C0C0C0;
   text-decoration: none;
   padding: 12px 15px;
-  border-radius: 8px;
   margin: 6px 0;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
   font-weight: 600;
-  transition: background 0.3s, transform 0.3s;
+  transition: background 0.3s, color 0.3s, transform 0.3s;
 }
+nav a i {
+  font-size: 1.6rem;
+  min-width: 30px;
+  text-align: center;
+}
+
+nav a .text {
+  margin-left: 15px;
+  display: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+nav:hover a .text {
+  display: inline-block;
+  opacity: 1;
+}
+
 nav a span.text { display: none; }
 nav:hover a span.text { display: inline-block; }
+
 nav a:hover {
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #fff;
+  background: linear-gradient(120deg, #E0E0E0, #C0C0C0);
+  color: #000000;
   transform: scale(1.05);
 }
 nav a.active {
-  background: linear-gradient(120deg, #e67e00, #ff8500);
-  color: white;
+  background: #C0C0C0;
+  color: #000000;
 }
-
+nav a.active i,
+nav a.active .text {
+  color: #000000;
+}
 /* Main Content */
 .content {
   margin-left: 80px;
@@ -69,7 +106,7 @@ header {
   margin-bottom: 30px;
 }
 header h1 {
-  color: #ff8500;
+  color: #f0f0f0; /* chrome white */
   font-size: 2.5rem;
   display: flex;
   align-items: center;
@@ -94,11 +131,11 @@ header p {
   border-radius: 15px;
   padding: 30px 20px;
   text-align: center;
-  box-shadow: 0 0 30px rgba(255,133,0,0.15);
+  box-shadow: 0 0 30px rgba(192, 192, 192, 0.15); /* silver glow */
 }
 .trimmer-container h2 {
   font-size: 1.8rem;
-  color: #ff8500;
+  color: #f0f0f0;
 }
 input[type="file"] {
   padding: 10px;
@@ -120,8 +157,8 @@ input[type="file"] {
   margin: 10px 5px;
   border: none;
   border-radius: 6px;
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #fff;
+  background: linear-gradient(120deg, #f0f0f0, #c0c0c0);
+  color: #000000;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
@@ -131,7 +168,7 @@ input[type="file"] {
 .controls button:hover,
 .controls a.btn:hover {
   transform: scale(1.05);
-  background: linear-gradient(120deg, #e67e00, #ff8500);
+  background: linear-gradient(120deg, #c0c0c0, #f0f0f0);
 }
 a.btn[disabled] {
   opacity: 0.5;
@@ -145,7 +182,7 @@ a.btn[disabled] {
   height: 120px;
   background: #000;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(255, 133, 0, 0.2);
+  box-shadow: 0 0 8px rgba(192, 192, 192, 0.2);
 }
 #bg-video {
   position: fixed;

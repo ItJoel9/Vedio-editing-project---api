@@ -4,7 +4,7 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: #111;
+  background: linear-gradient(120deg, #000000, #1a1a1a);
   color: #fff;
   display: flex;
 }
@@ -17,9 +17,10 @@ body {
   height: 100vh;
   object-fit: cover;
   z-index: -2;
-  opacity: 0.25; /* adjust for subtlety */
+  opacity: 0.25;
   pointer-events: none;
 }
+
 /* --- SIDEBAR NAVIGATION --- */
 nav {
   width: 60px;
@@ -59,7 +60,7 @@ nav:hover h2 {
 nav a {
   display: flex;
   align-items: center;
-  color: #ff8500;
+  color: #fff;
   text-decoration: none;
   padding: 12px 15px;
   margin: 6px 0;
@@ -85,13 +86,13 @@ nav:hover a .text {
   opacity: 1;
 }
 nav a:hover {
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #fff;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
+  color: #000;
   transform: scale(1.05);
 }
 nav a.active {
-  background: #ff8500;
-  color: #fff;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
+  color: #000;
 }
 
 /* --- MAIN PAGE CONTENT --- */
@@ -106,7 +107,7 @@ nav:hover ~ .main {
 }
 
 .main h1 {
-  color: #ff8500;
+  color: #ffffff;
   margin-bottom: 20px;
   font-size: 2rem;
 }
@@ -125,7 +126,7 @@ nav:hover ~ .main {
   font-size: 1rem;
 }
 .search-bar button {
-  background: #ff8500;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
   color: #111;
   border: none;
   border-radius: 5px;
@@ -140,16 +141,16 @@ nav:hover ~ .main {
 }
 .filter-buttons button {
   background: transparent;
-  border: 1px solid #ff8500;
-  color: #ff8500;
+  border: 1px solid #d1d1d1;
+  color: #d1d1d1;
   border-radius: 20px;
   padding: 8px 18px;
   margin: 5px;
   cursor: pointer;
 }
 .filter-buttons button:hover {
-  background: #ff8500;
-  color: #111;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
+  color: #000;
 }
 
 /* --- VIDEO CARD GRID --- */
@@ -165,7 +166,7 @@ nav:hover ~ .main {
   gap: 10px;
 }
 .section-title i {
-  color: #ff8500;
+  color: #d1d1d1;
   animation: bounceRight 1s infinite ease-in-out alternate;
 }
 
@@ -192,7 +193,7 @@ nav:hover ~ .main {
 
 .video-card:hover {
   transform: scale(1.06);
-  box-shadow: 0 0 20px rgba(255, 133, 0, 0.6);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
 .video-card img {
@@ -225,7 +226,7 @@ nav:hover ~ .main {
   border-radius: 10px;
 }
 .progress h2 {
-  color: #ff8500;
+  color: #ffffff;
 }
 .progress p {
   font-size: 1rem;
@@ -261,16 +262,17 @@ nav:hover ~ .main {
   top: 10px;
   right: 20px;
   font-size: 24px;
-  color: #ff8500;
+  color: #d1d1d1;
   cursor: pointer;
 }
+
 /* --- EXP Popup (when tutorial is completed) --- */
 .exp-popup {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
-  background: linear-gradient(135deg, #09ff00, #00e600);
+  background: linear-gradient(135deg, #ffffff, #d1d1d1);
   color: #111;
   padding: 20px 40px;
   border-radius: 20px;

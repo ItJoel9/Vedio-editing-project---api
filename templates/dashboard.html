@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Vdio | Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <video autoplay muted loop playsinline id="bg-video">
     <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
@@ -59,7 +59,7 @@
 
 <div class="content">
   <header>
-    <h1><img src="{{ url_for('static', filename='media/v.png') }}" alt="V Logo">dio</h1>
+    <h1><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo">dio</h1>
     <p>Account Dashboard</p>
   </header>
 
@@ -247,12 +247,12 @@
     .then(res => res.json())
     .then(data => {
       if (data.status === "success") {
-        console.log("✅ XP synced to Mongo");
+        console.log(" XP synced to Mongo");
       } else {
-        console.warn("❌ XP sync failed:", data.message);
+        console.warn(" XP sync failed:", data.message);
       }
     })
-    .catch(err => console.error("❌ XP sync error:", err));
+    .catch(err => console.error(" XP sync error:", err));
   });
 </script>
 

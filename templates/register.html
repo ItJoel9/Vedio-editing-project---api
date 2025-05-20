@@ -5,13 +5,21 @@
   <title>Vdio | Register</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
 </head>
 <body>
+
+  <!-- Background Video -->
+  <video autoplay muted loop id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+
+  <!-- Overlay -->
   <div class="overlay"></div>
 
+  <!-- Registration Form Container -->
   <div class="auth-container">
-    <img src="{{ url_for('static', filename='media/v.png') }}" alt="Vdio Logo" class="logo">
+    <img src="{{ url_for('static', filename='media/vn.png') }}" alt="Vdio Logo" class="logo">
     <h2>Register on Vdio</h2>
 
     <form id="registerForm" onsubmit="register(event)">
@@ -28,28 +36,35 @@
     <p id="msg"></p>
   </div>
 
+  <!-- Register Logic -->
   <script>
     async function register(e) {
-      e.preventDefault(); // stop form from reloading page
+      e.preventDefault();
 
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      const res = await fetch("/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password })
-      });
+      try {
+        const res = await fetch("/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password })
+        });
 
-      const data = await res.json();
-      document.getElementById("msg").innerText = data.msg || "Registered!";
+        const data = await res.json();
+        document.getElementById("msg").innerText = data.msg || "Registered!";
 
-      if (res.status === 201) {
-        alert("Registration successful! Redirecting to login...");
-        window.location.href = "{{ url_for('login_page') }}";
+        if (res.status === 201) {
+          alert("Registration successful! Redirecting to login...");
+          window.location.href = "{{ url_for('login_page') }}";
+        }
+      } catch (err) {
+        console.error("Register error:", err);
+        document.getElementById("msg").innerText = "Something went wrong.";
       }
     }
   </script>
+
 </body>
 </html>

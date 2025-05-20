@@ -4,17 +4,24 @@
   <meta charset="UTF-8">
   <title>Vdio | Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Style and Favicon -->
+
+  <!-- CSS and Icon -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
 </head>
 <body>
+
+  <!-- Background Video -->
+  <video autoplay muted loop id="bg-video">
+    <source src="{{ url_for('static', filename='media/background.mp4') }}" type="video/mp4">
+  </video>
+
+  <!-- Overlay -->
   <div class="overlay"></div>
 
+  <!-- Auth Container -->
   <div class="auth-container">
-    <img src="{{ url_for('static', filename='media/v.png') }}" alt="Vdio Logo" class="logo">
-    
+    <img src="{{ url_for('static', filename='media/vn.png') }}" alt="Vdio Logo" class="logo">
     <h2>Login to Vdio</h2>
 
     <form id="loginForm">
@@ -30,67 +37,39 @@
     <p id="msg"></p>
   </div>
 
+  <!-- JS Login Handler -->
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
-  
+
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-  
+
       try {
         const res = await fetch("/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
         });
-  
+
         const data = await res.json();
-  
+
         if (res.ok && data.redirect) {
-          // Store user data in localStorage
           localStorage.setItem("userEmail", email);
           localStorage.setItem("userName", data.name);
           localStorage.setItem("userPfp", data.pfp);
           localStorage.setItem("userRole", data.role);
-  
-          // ✅ DO THE REDIRECT
           window.location.href = data.redirect;
         } else {
-          alert(data.msg || "Login failed");
+          document.getElementById("msg").innerText = data.msg || "Login failed";
         }
-  
+
       } catch (err) {
         console.error("Login error:", err);
-        alert("Something went wrong.");
+        document.getElementById("msg").innerText = "Something went wrong.";
       }
     });
-
-    fetch("/auth/login", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value
-  })
-})
-.then(res => res.json())
-.then(data => {
-  if (data.user_id) {
-    // ✅ Save to localStorage
-    localStorage.setItem("vdio_user_id", data.user_id);
-    alert("Login successful!");
-    window.location.href = data.redirect;
-  } else {
-    alert(data.msg || "Login failed");
-  }
-})
-.catch(err => {
-  console.error(err);
-  alert("Something went wrong");
-});
-
   </script>
-  
-  
+
 </body>
 </html>

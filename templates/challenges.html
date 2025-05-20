@@ -3,174 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
   <title>Vdio | Challenges</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/challenges.css') }}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <style>
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -2;
-      opacity: 0.25;
-      pointer-events: none;
-      filter: brightness(0.6) contrast(1.1);
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      color: #e0e0e0;
-      background: #121212;
-    }
-
-    .content {
-      margin-left: 70px;
-      padding: 40px 20px;
-    }
-
-    nav {
-      width: 60px;
-      background: #1a1a1a;
-      height: 100vh;
-      position: fixed;
-      padding: 20px 10px;
-      overflow-y: auto;
-      transition: width 0.3s ease;
-    }
-
-    nav:hover {
-      width: 250px;
-    }
-
-    nav h2 {
-      color: #fff;
-      font-size: 1rem;
-      margin-top: 30px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    nav:hover h2 {
-      opacity: 1;
-    }
-
-    nav a {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: #ff8500;
-      font-weight: 600;
-      margin: 8px 0;
-      padding: 12px;
-      border-radius: 6px;
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-
-    nav a:hover {
-      background: linear-gradient(to right, #ff8500, #e67e00);
-      color: #fff;
-      transform: scale(1.05);
-    }
-
-    nav a span.text {
-      display: none;
-    }
-
-    nav:hover a span.text {
-      display: inline;
-    }
-
-    .challenge-intro {
-      background: #1e1e1e;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(255, 133, 0, 0.05);
-      margin-bottom: 40px;
-    }
-
-    .challenge-intro h2 {
-      color: #ff9900;
-      margin-bottom: 10px;
-    }
-
-    .challenge-intro p {
-      margin-bottom: 20px;
-      color: #aaa;
-    }
-
-    .challenge-intro input,
-    .challenge-intro select,
-    .challenge-intro button {
-      display: block;
-      width: 100%;
-      padding: 12px 14px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-      background: #2b2b2b;
-      color: #f0f0f0;
-    }
-
-    .challenge-intro input:focus,
-    .challenge-intro select:focus {
-      outline: none;
-      border: 1px solid #ff8500;
-    }
-
-    .challenge-intro select option {
-      background: #2b2b2b;
-      color: #fff;
-    }
-
-    .cta-button {
-      background: #ff8500;
-      color: #111;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .cta-button:hover {
-      transform: scale(1.03);
-      background: #e67e00;
-    }
-
-    .challenge-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .challenge-card {
-      background: #1e1e1e;
-      padding: 20px;
-      border-left: 5px solid #ff8500;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255, 133, 0, 0.05);
-      transition: transform 0.3s ease;
-    }
-
-    .challenge-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .challenge-card h3 {
-      color: #ff8500;
-      margin-bottom: 10px;
-    }
-
-    .challenge-card p {
-      color: #bbb;
-    }
-  </style>
+  
 </head>
 <body>
   <video autoplay muted loop playsinline id="bg-video">
@@ -178,6 +16,7 @@
   </video>
 
   <nav id="sidebar">
+    <h2><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;"></h2>
     <h2>Account</h2>
     <a href="{{ url_for('login_page') }}" class="{% if request.endpoint == 'login_page' %}active{% endif %}"><i class="fa-solid fa-user"></i><span class="text">Login</span></a>
     <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}"><i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span></a>
@@ -196,14 +35,14 @@
 
   <div class="content">
     <section class="challenge-intro">
-      <h2>Weekly Video Editing Challenge 🎮</h2>
+      <h2>Weekly Video Editing Challenge </h2>
       <p>Unleash your creativity and compete with editors around the world. Submit your edit, get featured, and win exciting prizes!</p>
       <form id="challengeForm">
         <select name="title" required>
           <option value="">-- Select a Challenge --</option>
-          <option value="Slow Motion Mastery">🔥 Slow Motion Mastery</option>
-          <option value="Light Flicker FX">✨ Light Flicker FX</option>
-          <option value="Action Cut Sync">💥 Action Cut Sync</option>
+          <option value="Slow Motion Mastery"> Slow Motion Mastery</option>
+          <option value="Light Flicker FX"> Light Flicker FX</option>
+          <option value="Action Cut Sync"> Action Cut Sync</option>
         </select>
         <input type="email" name="user" placeholder="Your Email" required>
         <button type="submit" class="cta-button">Submit My Edit</button>
@@ -212,15 +51,15 @@
 
     <section class="challenge-grid">
       <div class="challenge-card">
-        <h3>🔥 Theme: Slow Motion Mastery</h3>
+        <h3> Theme: Slow Motion Mastery</h3>
         <p>Use slow motion creatively. Impress us with cinematic timing!</p>
       </div>
       <div class="challenge-card">
-        <h3>✨ Theme: Light Flicker FX</h3>
+        <h3> Theme: Light Flicker FX</h3>
         <p>Create an edit using high-energy flicker transitions and glowing effects.</p>
       </div>
       <div class="challenge-card">
-        <h3>💥 Theme: Action Cut Sync</h3>
+        <h3> Theme: Action Cut Sync</h3>
         <p>Cut to the beat, match movement, and make it hit hard!</p>
       </div>
     </section>

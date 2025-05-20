@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vdio | Audio Trimmer</title>
   <link rel="stylesheet" href="../static/css/trimmer.css" />
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     .time-display {
@@ -82,7 +82,7 @@
 
   <div class="content">
     <header>
-      <h1><img src="/static/media/v.png" alt="V Logo">dio</h1>
+      <h1><img src="/static/media/vn.png" alt="V Logo">dio</h1>
       <p>Trim your audio clips with precision</p>
     </header>
 
@@ -146,8 +146,9 @@
     
       wavesurfer = WaveSurfer.create({
         container: '#waveform',
-        waveColor: '#ff8500',
-        progressColor: '#e67e00',
+        waveColor: '#C0C0C0',
+        progressColor: '#E0E0E0',
+        cursorColor: '#FFFFFF',
         height: 120,
         normalize: true,
         responsive: true,
@@ -160,7 +161,8 @@
       playBtn.disabled = false;
     
       regionPlugin.enableDragSelection({
-        color: 'rgba(255, 133, 0, 0.3)'
+        color: 'rgba(192, 192, 192, 0.3)'  // silver, translucent
+
       });
     
       regionPlugin.on('region-created', (r) => {

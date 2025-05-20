@@ -8,7 +8,7 @@ body {
   display: flex;
 }
 
-/* --- SIDEBAR NAVIGATION (REPLACED) --- */
+/* --- SIDEBAR NAVIGATION --- */
 nav {
   width: 60px;
   background: #1a1a1a;
@@ -45,7 +45,7 @@ nav:hover h2 {
 nav a {
   display: flex;
   align-items: center;
-  color: #ff8500;
+  color: #f5f5f5;
   text-decoration: none;
   padding: 12px 15px;
   margin: 6px 0;
@@ -71,20 +71,20 @@ nav:hover a .text {
   opacity: 1;
 }
 nav a:hover {
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #fff;
+  background: linear-gradient(to right, #f5f5f5, #c0c0c0);
+  color: #000;
   transform: scale(1.05);
 }
 nav a.active {
-  background: #ff8500;
-  color: #fff;
+  background: linear-gradient(to right, #f5f5f5, #c0c0c0);
+  color: #000;
 }
 nav a.active i,
 nav a.active .text {
-  color: #fff;
+  color: #000;
 }
 
-/* --- MAIN CONTENT SHIFT (unchanged) --- */
+/* --- MAIN CONTENT SHIFT --- */
 .content {
   margin-left: 80px;
   padding: 40px 30px;
@@ -101,7 +101,7 @@ header {
   margin-bottom: 30px;
 }
 header h1 {
-  color: #ff8500;
+  color: #c0c0c0;
   font-size: 2.8rem;
   display: flex;
   justify-content: center;
@@ -125,7 +125,7 @@ header img {
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  border: 3px solid #ff8500;
+  border: 3px solid #c0c0c0;
   object-fit: cover;
 }
 .profile-card input,
@@ -142,7 +142,7 @@ header img {
   box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
 }
 .xp-fill {
-  background: linear-gradient(to right, #ff8500, #ffcc00);
+  background: linear-gradient(to right, #f5f5f5, #c0c0c0);
   height: 100%;
   line-height: 26px;
   color: #000;
@@ -162,17 +162,17 @@ header img {
 .badge {
   background: linear-gradient(135deg, #0a0a0a, #1b1b1b);
   padding: 24px;
-  border: 2px solid #c8aa6e;
+  border: 2px solid #c0c0c0;
   border-radius: 20px;
   text-align: center;
-  box-shadow: 0 6px 20px rgba(200, 170, 110, 0.15);
+  box-shadow: 0 6px 20px rgba(192, 192, 192, 0.15);
   transition: all 0.3s ease-in-out;
   position: relative;
 }
 .badge:hover {
   transform: scale(1.05);
   background: linear-gradient(145deg, #1e1e1e, #111);
-  box-shadow: 0 10px 25px rgba(200, 170, 110, 0.3);
+  box-shadow: 0 10px 25px rgba(192, 192, 192, 0.3);
 }
 .badge::before {
   content: "";
@@ -182,23 +182,23 @@ header img {
   right: -8px;
   bottom: -8px;
   border-radius: 22px;
-  background: radial-gradient(circle, rgba(200, 170, 110, 0.1), transparent);
+  background: radial-gradient(circle, rgba(192, 192, 192, 0.1), transparent);
   z-index: -1;
   opacity: 0.25;
   transition: opacity 0.3s ease;
 }
 .badge i {
-  color: #e4c96f;
+  color: #dcdcdc;
   font-size: 2.2rem;
   margin-bottom: 10px;
-  text-shadow: 0 0 5px rgba(255, 215, 0, 0.1);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
 }
 .badge p {
   margin-top: 8px;
   color: #f5f5dc;
   font-weight: 700;
   font-size: 16px;
-  text-shadow: 0 0 4px rgba(200, 170, 110, 0.1);
+  text-shadow: 0 0 4px rgba(200, 200, 200, 0.1);
   letter-spacing: 0.6px;
 }
 
@@ -209,11 +209,11 @@ header img {
   padding: 22px;
   margin-top: 25px;
   text-align: center;
-  box-shadow: 0 0 12px rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
 }
 .achievement-detail i {
   font-size: 3rem;
-  color: #e4c96f;
+  color: #dcdcdc;
 }
 .achievement-detail h3, .achievement-detail p {
   color: #eee;
@@ -244,8 +244,8 @@ header img {
   justify-content: center;
 }
 .pfp-btn {
-  background: #ff8500;
-  color: #fff;
+  background: linear-gradient(to right, #f5f5f5, #c0c0c0);
+  color: #000;
   border: none;
   padding: 10px 18px;
   border-radius: 10px;
@@ -255,7 +255,7 @@ header img {
   font-size: 14px;
 }
 .pfp-btn:hover {
-  background: #e67e00;
+  background: linear-gradient(to right, #e0e0e0, #a9a9a9);
 }
 
 /* Background Video */

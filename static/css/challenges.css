@@ -8,16 +8,37 @@ body {
   color: #ffffff;
 }
 
+/* Background Video */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+  opacity: 0.25;
+  pointer-events: none;
+  filter: brightness(0.6) contrast(1.1);
+}
+
+/* Content Container */
+.content {
+  margin-left: 70px;
+  padding: 40px 20px;
+  transition: margin-left 0.3s ease;
+}
+
 /* Sidebar Navigation */
 nav {
   width: 60px;
   background: #1a1a1a;
   height: 100vh;
   padding: 20px 10px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
   position: fixed;
-  transition: width 0.3s ease;
   overflow-y: auto;
+  transition: width 0.3s ease;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
   scrollbar-width: none;
   -ms-overflow-style: none;
   z-index: 1000;
@@ -25,6 +46,7 @@ nav {
 nav::-webkit-scrollbar {
   display: none;
 }
+
 nav:hover {
   width: 250px;
 }
@@ -32,11 +54,11 @@ nav:hover {
 /* Nav Section Titles */
 nav h2 {
   color: #ffffff;
-  text-align: center;
   font-size: 1.4rem;
   margin: 20px 0 10px;
   opacity: 0;
   transition: opacity 0.3s ease;
+  text-align: center;
 }
 nav:hover h2 {
   opacity: 1;
@@ -46,9 +68,9 @@ nav:hover h2 {
 nav a {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #ff8500;
+  gap: 12px;
   text-decoration: none;
+  color: #ffffff;
   padding: 12px 15px;
   margin: 6px 0;
   border-radius: 8px;
@@ -56,67 +78,105 @@ nav a {
   font-size: 1rem;
   transition: background 0.3s, transform 0.3s;
 }
+
 nav a i {
   font-size: 1.4rem;
   min-width: 24px;
   text-align: center;
 }
+
 nav a span.text {
   display: none;
   white-space: nowrap;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
 }
+
 nav:hover a span.text {
   display: inline-block;
   opacity: 1;
 }
+
 nav a:hover {
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: #ffffff;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
+  color: #000000;
   transform: scale(1.05);
 }
+
 nav a.active {
-  background: linear-gradient(120deg, #e67e00, #ff8500);
-  color: #ffffff;
+  background: linear-gradient(120deg, #d1d1d1, #ffffff);
+  color: #000000;
 }
 
-/* Main Content */
-.content {
-  margin-left: 80px;
-  padding: 40px 20px;
-  transition: margin-left 0.3s ease;
-}
+/* Adjust content margin when nav expands */
 nav:hover ~ .content {
   margin-left: 270px;
 }
 
 /* Intro Section */
 .challenge-intro {
-  text-align: center;
+  background: rgba(26, 26, 26, 0.7);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
   margin-bottom: 40px;
+  text-align: center;
 }
+
 .challenge-intro h2 {
-  color: #ff8500;
+  color: #ffffff;
   font-size: 2rem;
   margin-bottom: 10px;
 }
+
 .challenge-intro p {
+  color: #bbb;
   font-size: 1.1rem;
-  color: #ddd;
+  margin-bottom: 20px;
 }
+
+.challenge-intro input,
+.challenge-intro select,
+.challenge-intro button {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background: linear-gradient(120deg, #1a1a1a, #000000);
+  color: #ffffff;
+  transition: border 0.3s ease;
+}
+
+.challenge-intro input:focus,
+.challenge-intro select:focus {
+  outline: none;
+  border: 1px solid #d1d1d1;
+}
+
+.challenge-intro select option {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+/* CTA Button */
 .cta-button {
   margin-top: 20px;
   display: inline-block;
-  background: linear-gradient(120deg, #ff8500, #e67e00);
-  color: white;
+  background: linear-gradient(120deg, #ffffff, #d1d1d1);
+  color: #000000;
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
   text-decoration: none;
-  transition: background 0.3s, transform 0.2s;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s ease;
 }
+
 .cta-button:hover {
-  background: linear-gradient(120deg, #e67e00, #ff8500);
+  background: linear-gradient(120deg, #d1d1d1, #ffffff);
   transform: scale(1.05);
 }
 
@@ -126,20 +186,26 @@ nav:hover ~ .content {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 25px;
 }
+
+/* Challenge Card */
 .challenge-card {
-  background: #1f1f1f;
+  background: rgba(26, 26, 26, 0.7);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 0 12px rgba(255, 133, 0, 0.2);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
   transition: transform 0.3s ease;
+  border-left: 5px solid #ffffff;
 }
+
 .challenge-card:hover {
   transform: scale(1.03);
 }
+
 .challenge-card h3 {
-  color: #ff8500;
+  color: #ffffff;
   margin-bottom: 10px;
 }
+
 .challenge-card p {
   color: #ccc;
   font-size: 0.95rem;

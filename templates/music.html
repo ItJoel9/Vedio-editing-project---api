@@ -6,7 +6,7 @@
   <title>Vdio | Trending Music</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/music.css') }}">
-  <link rel="icon" href="{{ url_for('static', filename='media/v.png') }}" type="image/png">
+  <link rel="icon" href="{{ url_for('static', filename='media/vn.png') }}" type="image/png">
 </head>
 <body>
   <video autoplay muted loop playsinline id="bg-video">
@@ -14,6 +14,7 @@
   </video>
   <!-- Sidebar -->
   <nav id="sidebar">
+    <h2><img src="{{ url_for('static', filename='media/vn.png') }}" alt="V Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;"></h2>
     <h2>Account</h2>
     <a href="{{ url_for('login_page') }}"><i class="fa-solid fa-user"></i><span class="text">Login</span></a>
     <a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-chart-line"></i><span class="text">Dashboard</span></a>
@@ -48,25 +49,26 @@
       {% endfor %}
     </div>
     <div style="margin: 30px 0; text-align: center;">
-      <a href="/recommend_test" style="text-decoration: none;">
-        <button style="
-          padding: 14px 28px;
-          font-size: 18px;
-          font-weight: 600;
-          background: linear-gradient(90deg, #ff8500, #ff6500);
-          border: none;
-          border-radius: 12px;
-          color: white;
-          cursor: pointer;
-          box-shadow: 0 5px 15px rgba(255, 133, 0, 0.4);
-          transition: all 0.3s ease;
-        "
-        onmouseover="this.style.background='linear-gradient(90deg, #ff6500, #ff8500)'"
-        onmouseout="this.style.background='linear-gradient(90deg, #ff8500, #ff6500)'">
-          🎵 View Your Smart Recommendations
-        </button>
-      </a>
-    </div>
+  <a href="/recommend_test" style="text-decoration: none;">
+    <button style="
+      padding: 14px 28px;
+      font-size: 18px;
+      font-weight: 600;
+      background: linear-gradient(90deg, #ffffff, #d1d1d1);
+      border: none;
+      border-radius: 12px;
+      color: #000000;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    "
+    onmouseover="this.style.background='linear-gradient(90deg, #d1d1d1, #ffffff)'"
+    onmouseout="this.style.background='linear-gradient(90deg, #ffffff, #d1d1d1)'">
+      🎵 View Your Smart Recommendations
+    </button>
+  </a>
+</div>
+
     
     
 
