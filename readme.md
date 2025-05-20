@@ -1,7 +1,7 @@
 <img src="https://github.com/user-attachments/assets/6401caed-41b8-4537-89d5-2fad528abb39" alt="Vdio Banner" style="width:100%; max-height:300px; object-fit:cover;">
 
 
-<img src="https://github.com/user-attachments/assets/38dc71e6-8a29-416f-add1-39403f87a736" alt="Vdio Logo" width="200"> # Vdio - Creative Video Editing Platform
+<img src="https://github.com/user-attachments/assets/38dc71e6-8a29-416f-add1-39403f87a736" alt="Vdio Logo" width="500"> # Vdio - Creative Video Editing Platform
 
 **Vdio** is a full-stack video editing, learning, and challenge platform built with Flask, MongoDB, and JavaScript. It combines creative tools, educational tutorials, and interactive components for creators, editors, and students.
 
